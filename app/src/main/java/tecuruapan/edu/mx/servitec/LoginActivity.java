@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
+        //comment
     }
 
     public class HTTPHandler extends AsyncTask<String, Void, Void> {
