@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    tools:context="tecuruapan.edu.mx.servitec.ActividadesActivity">
+
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/action_bar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="3dp"></include>
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Asistencia al curso de inducción."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_curso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-35dp"
+        android:src="@drawable/ic_aceptado" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Solicitar carta de presentación."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_presentacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-25dp"
+        android:src="@drawable/ic_aceptado" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Solicitud de registro de servicio social."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_registro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-40dp"
+        android:src="@drawable/ic_aceptado" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Primer Avance."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_primero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/ic_rechazado" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Segundo Avance."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_segundo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/ic_rechazado" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Tercer Avance."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_tercer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/ic_rechazado" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Oficio de Terminación."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_terminacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/ic_revisado" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Informe Global."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_global"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/ic_defecto" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="left"
+        android:text="Carta de Evaluación Receptora."
+        android:textColor="@color/primaryText"
+        android:textSize="18dp" />
+
+    <ImageView
+        android:id="@+id/imagen_evaluacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/ic_defecto" />
+
+    <TextView
+        android:id="@+id/mensaje_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Aqui aparecen los mensajes de  revision/error"
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp" />
+
+</LinearLayout>
