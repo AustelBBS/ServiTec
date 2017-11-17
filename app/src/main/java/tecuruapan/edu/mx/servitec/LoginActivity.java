@@ -1,16 +1,12 @@
 package tecuruapan.edu.mx.servitec;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import lib.ServicioSocial;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,28 +37,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void conectar(String user, String pass) {
-        CentralDeConexiones.miServicioSocial = new ServicioSocial(user, pass);
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    CentralDeConexiones.miServicioSocial.iniciarSesion();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    Toast.makeText(LoginActivity.this, "Sesion iniciada!", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-//                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
         //HTTPHandler httpHandler = new HTTPHandler(user, pass);
         //httpHandler.execute("http://tecuruapan.edu.mx/ssocial/?modulo=logeo");
-
-//        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         //comment
     }
 

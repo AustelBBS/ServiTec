@@ -96,4 +96,15 @@
         android:layout_marginTop="-40dp"
         android:src="@drawable/ic_salir" />
 
+    <TextView
+        android:id="@+id/tvFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center_vertical"
+        android:text="fecha 00/00/00"
+        android:textAlignment="center"
+        android:textSize="18dp" />
+
 </android.support.v7.widget.LinearLayoutCompat>
