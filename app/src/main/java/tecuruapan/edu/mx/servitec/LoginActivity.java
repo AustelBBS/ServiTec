@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 
 public class LoginActivity extends AppCompatActivity {
@@ -17,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText numControl;
     EditText contrasena;
     Button connect;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,8 @@ public class LoginActivity extends AppCompatActivity {
         connect = (Button) findViewById(R.id.ConectarBtn);
         numControl = (EditText) findViewById(R.id.NumControl);
         contrasena = (EditText) findViewById(R.id.Contrasena);
-
+        progressBar = (ProgressBar) findViewById(R.id.login_progress);
+        progressBar.setVisibility(View.INVISIBLE);
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,32 +42,35 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         setSupportActionBar(toolbar);
+
     }
 
     public void conectar(String user, String pass) {
+        progressBar.setVisibility(View.VISIBLE);
         CentralDeConexiones.miServicioSocial = new ServicioSocial(user, pass);
-        AsyncTask.execute(new Runnable() {
+
+        AsyncTask<Void, Void, Void> networkTask = new AsyncTask<Void, Void, Void>() {
+            String res;
             @Override
-            public void run() {
-                try {
-                    CentralDeConexiones.miServicioSocial.iniciarSesion();
+            protected Void doInBackground(Void... voids) {
+                res = CentralDeConexiones.miServicioSocial.iniciarSesion();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(LoginActivity.this, res, Toast.LENGTH_SHORT).show();
+                if(CentralDeConexiones.miServicioSocial.sesionIniciada) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    Toast.makeText(LoginActivity.this, "Sesion iniciada!", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-//                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        };
+        networkTask.execute();
 
 
-        //HTTPHandler httpHandler = new HTTPHandler(user, pass);
-        //httpHandler.execute("http://tecuruapan.edu.mx/ssocial/?modulo=logeo");
-
-//        finish();
-        //comment
     }
 
     /*

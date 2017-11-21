@@ -1,13 +1,12 @@
-package tecuruapan.edu.mx.servitec;
-
-import lib.ServicioSocial;
+package lib;
 
 /**
  * Created by mar on 16/11/17.
  */
 
 public class CentralDeConexiones {
-    static ServicioSocial miServicioSocial;
+    public static final String  ACTIVIDADES = "estado_actividades";
+    public static ServicioSocial miServicioSocial;
 
 
     private static final CentralDeConexiones ourInstance = new CentralDeConexiones();

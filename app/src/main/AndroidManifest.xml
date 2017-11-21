@@ -21,7 +21,12 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ActividadesActivity" />
         <activity android:name=".PerfilActivity" />
-        <activity android:name=".ActividadActivity"></activity>
+        <activity android:name=".ActividadActivity" />
+
+        <service
+            android:name=".ServicioDeActividades"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

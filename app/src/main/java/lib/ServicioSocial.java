@@ -2,6 +2,7 @@ package lib;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,8 +24,13 @@ import org.jsoup.select.Elements;
  *
  */
 public class ServicioSocial {
-    final static String URL_BASE = "http://tecuruapan.edu.mx/ssocial/?modulo=";
+    // estados
+    public final static String APROBADO = "aprobado";
+    public final static String VACIO = "vacio";
+    public final static String ERROR = "error";
+//    final static String URL_BASE = "http://tecuruapan.edu.mx/ssocial/?modulo=";
 //    final static String URL_BASE = "http://localhost/ssocial/index.php?modulo=";
+    final static String URL_BASE = "http://192.168.1.74/ssocial/index.php?modulo=";
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";
     final static String MI_CUENTA = "miCuenta";
@@ -34,6 +40,8 @@ public class ServicioSocial {
     private String noControl;
     private String pass;
     private String cookie;
+    public String mensajes;
+    public boolean sesionIniciada;
 
     /**
      * Crea una instancia de esta madre a la vez que inicia sesión con las credenciales provistas. Lanza excepcion si sale un error.
@@ -43,33 +51,51 @@ public class ServicioSocial {
     public ServicioSocial(String noControl, String pass) {
         this.noControl = noControl;
         this.pass = pass;
+        sesionIniciada = false;
     }
-    public void iniciarSesion() throws Exception {
-        if(noControl.length() != 8) throw new Exception("Error, el número de contorl sólo puede tener 8 dígitos.");
+    public String iniciarSesion()  {
+        if(noControl.length() != 8) return ("Error, el número de contorl sólo puede tener 8 dígitos.");
         // obtener cookie
         //obtener cookie de phpsesion
-        Connection.Response respuesta = Jsoup.connect(URL_BASE)
-                .method(Connection.Method.HEAD)
-                .execute();
-        cookie = respuesta.cookie(COOKIE_PHP);
-        // mandamos nuestra solicitud
-        Document doc = Jsoup.connect(URL_BASE + LOGUEO)
-                .data("noControl", noControl)
-                .data("clave", pass)
-                .data("sesion", "Iniciar Sesion")
-                .followRedirects(false)
-                .cookie(COOKIE_PHP, cookie)
-                .post();
-        
+        Document doc;
+        try {
+            Connection.Response respuesta = Jsoup.connect(URL_BASE)
+                    .method(Connection.Method.HEAD)
+                    .execute();
+            cookie = respuesta.cookie(COOKIE_PHP);
+            // mandamos nuestra solicitud
+            doc = Jsoup.connect(URL_BASE + LOGUEO)
+                    .data("noControl", noControl)
+                    .data("clave", pass)
+                    .data("sesion", "Iniciar Sesion")
+                    .followRedirects(false)
+                    .cookie(COOKIE_PHP, cookie)
+                    .timeout(2000)
+                    .post();
+        }catch (Exception ex){
+            String msg ="Error al acceder al servidor" + "\n" + ex.getMessage();
+            Log.e("ServicioSocial", msg);
+            ex.printStackTrace();
+            return msg;
+        }
         // comprobamos que nos hayamos podido 
 //        String resultado = doc.getElementById("respuesta").outerHtml();
         String resultado = doc.outerHtml();
         
-        if(resultado.contains("correctamente"))
-            System.out.println("Sesion iniciada correctamente");
+        if(resultado.contains("correctamente")) {
+            sesionIniciada = true;
+            return "Sesion iniciada correctamente";
+
+        }
         else if(resultado.contains("Error")){
-            System.out.println("Error con los datos de acceso");
-            throw new Exception("Datos de acceso incorrectos");
+            sesionIniciada = false;
+            return "Error con los datos de acceso";
+
+//            throw new Exception("Datos de acceso incorrectos");
+        }
+        else {
+            sesionIniciada = false;
+            return "Error desconocido";
         }
     }
     
@@ -296,11 +322,6 @@ public class ServicioSocial {
         return Jsoup.connect(url).cookie(COOKIE_PHP, cookie);
     }
     
-  
 
-    // estados
-    final static String APROBADO = "aprobado";
-    final static String VACIO = "vacio";
-    final static String ERROR = "error";
 
 }
