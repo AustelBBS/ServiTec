@@ -8,11 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText numControl;
     EditText contrasena;
     Button connect;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,8 @@ public class LoginActivity extends AppCompatActivity {
         connect = (Button) findViewById(R.id.ConectarBtn);
         numControl = (EditText) findViewById(R.id.NumControl);
         contrasena = (EditText) findViewById(R.id.Contrasena);
-
+        progressBar = (ProgressBar) findViewById(R.id.login_progress);
+        progressBar.setVisibility(View.INVISIBLE);
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,16 +37,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         setSupportActionBar(toolbar);
+
     }
 
-    public void conectar(String user, String pass) {
-        //HTTPHandler httpHandler = new HTTPHandler(user, pass);
-        //httpHandler.execute("http://tecuruapan.edu.mx/ssocial/?modulo=logeo");
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        //comment
-    }
+ 
 
     /*
     Depecrated, have direct access to db
