@@ -22,6 +22,8 @@ public class ActividadesActivity extends AppCompatActivity {
             imagenSegundo, imagenTercer, imagenGlobal, imagenTerminacion, imagenEvaluacion;
     HashMap<String, String> actividades;
 
+    Intent intentService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,7 @@ public class ActividadesActivity extends AppCompatActivity {
         imagenEvaluacion = (ImageView) findViewById(R.id.imagen_evaluacion);
         actualizarEstados();
         startService(new Intent(this, ServicioDeActividades.class));
+//        stopService()
 
     }
 

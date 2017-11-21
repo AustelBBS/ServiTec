@@ -30,7 +30,9 @@ public class ServicioSocial {
     public final static String ERROR = "error";
 //    final static String URL_BASE = "http://tecuruapan.edu.mx/ssocial/?modulo=";
 //    final static String URL_BASE = "http://localhost/ssocial/index.php?modulo=";
-    final static String URL_BASE = "http://192.168.1.74/ssocial/index.php?modulo=";
+//    final static String URL_BASE = "http://192.168.1.74/ssocial/index.php?modulo=";
+    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo=";
+    //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo=";
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";
     final static String MI_CUENTA = "miCuenta";
@@ -42,6 +44,8 @@ public class ServicioSocial {
     private String cookie;
     public String mensajes;
     public boolean sesionIniciada;
+    public HashMap<String, String> actividades; // es que es molesto tener que buscar formas
+    // de pasar las cosas cuando  usas clases anonimas
 
     /**
      * Crea una instancia de esta madre a la vez que inicia sesión con las credenciales provistas. Lanza excepcion si sale un error.
@@ -175,6 +179,7 @@ public class ServicioSocial {
         } catch (IOException ex) {
             Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return actividades;
     }
     
