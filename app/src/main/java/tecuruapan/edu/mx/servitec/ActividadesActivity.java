@@ -39,7 +39,7 @@ public class ActividadesActivity extends AppCompatActivity {
         imagenGlobal = (ImageView) findViewById(R.id.imagen_global);
         imagenEvaluacion = (ImageView) findViewById(R.id.imagen_evaluacion);
         actualizarEstados();
-        startService(new Intent(this, ServicioDeActividades.class));
+
 //        stopService()
 
     }
@@ -129,6 +129,8 @@ public class ActividadesActivity extends AppCompatActivity {
         protected void onPostExecute(HashMap<String, String> resultados) {
             super.onPostExecute(resultados);
             ponerImagenes(resultados);
+            guardarEstados();
+            startService(new Intent(ActividadesActivity.this, ServicioDeActividades.class));
         }
     }
 

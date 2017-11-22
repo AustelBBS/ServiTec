@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -18,10 +19,12 @@ import java.util.function.BiConsumer;
 
 import lib.CentralDeConexiones;
 
+import static android.content.ContentValues.TAG;
 import static lib.CentralDeConexiones.miServicioSocial;
 
 public class ServicioDeActividades extends Service {
-    public static final long  INTERVALO = 1000 * 20; // 60 segundos
+    public final static String TAG = "ServicioActividades";
+    public static final long  INTERVALO = 1000 * 30; // 60 segundos
     private Handler handler = new Handler();
     private Timer timer = null;
     public ServicioDeActividades() {
@@ -52,13 +55,7 @@ public class ServicioDeActividades extends Service {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CentralDeConexiones.miServicioSocial.recuperarActividades();
-                    }
-                }).start();
-                Toast.makeText(ServicioDeActividades.this, CentralDeConexiones.miServicioSocial.actividades.size(), Toast.LENGTH_SHORT).show();
+             new tareaNetwork().execute();
             }
         });
 
@@ -69,10 +66,33 @@ public class ServicioDeActividades extends Service {
 
 
     class tareaNetwork extends AsyncTask<Void, Void, Void> {
-
+        HashMap<String, String> actividadeNuevas;
         @Override
         protected Void doInBackground(Void... voids) {
+            actividadeNuevas = CentralDeConexiones.miServicioSocial.recuperarActividades();
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            SharedPreferences actividadesViejas = getSharedPreferences(CentralDeConexiones.ACTIVIDADES, 0);
+            Set<String> llaves = actividadeNuevas.keySet();
+            for(String llave: llaves){
+                String valorViejo = actividadesViejas.getString(llave, "Error");
+                String valorNuevo = actividadeNuevas.get(llave);
+
+                if(!(valorViejo == valorNuevo)) {
+                    Toast.makeText(ServicioDeActividades.this, "Hubo un cambio en tus documentos" , Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"llave:'" + llave + "'");
+                    Log.d(TAG, "valor en hashmap:'" + valorNuevo + "'");
+                    Log.d(TAG, "valor en preferences:'" + valorViejo + "'");
+                    break;
+
+                }else {
+                    Log.d(TAG, "No se cambio nada");
+                }
+            }
         }
     }
 
