@@ -30,8 +30,8 @@ public class ServicioSocial {
     public final static String ERROR = "error";
 //    final static String URL_BASE = "http://tecuruapan.edu.mx/ssocial/?modulo=";
 //    final static String URL_BASE = "http://localhost/ssocial/index.php?modulo=";
-//    final static String URL_BASE = "http://192.168.1.74/ssocial/index.php?modulo=";
-    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo=";
+    final static String URL_BASE = "http://192.168.1.74/ssocial/index.php?modulo=";
+//    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo=";
     //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo=";
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";

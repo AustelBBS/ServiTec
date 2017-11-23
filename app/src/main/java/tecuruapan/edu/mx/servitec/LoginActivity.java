@@ -46,31 +46,37 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void conectar(String user, String pass) {
-        progressBar.setVisibility(View.VISIBLE);
         CentralDeConexiones.miServicioSocial = new ServicioSocial(user, pass);
+        new LoginTask ().execute();
+    }
 
-        AsyncTask<Void, Void, Void> networkTask = new AsyncTask<Void, Void, Void>() {
-            String res;
-            @Override
-            protected Void doInBackground(Void... voids) {
-                res = CentralDeConexiones.miServicioSocial.iniciarSesion();
-                return null;
+    class LoginTask extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            connect.setEnabled(false);
+        }
+
+        String res;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            res = CentralDeConexiones.miServicioSocial.iniciarSesion();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.INVISIBLE);
+            connect.setEnabled(true);
+            Toast.makeText(LoginActivity.this, res, Toast.LENGTH_SHORT).show();
+            if(CentralDeConexiones.miServicioSocial.sesionIniciada) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(LoginActivity.this, res, Toast.LENGTH_SHORT).show();
-                if(CentralDeConexiones.miServicioSocial.sesionIniciada) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-            }
-        };
-        networkTask.execute();
-
-
+        }
     }
 
     /*
