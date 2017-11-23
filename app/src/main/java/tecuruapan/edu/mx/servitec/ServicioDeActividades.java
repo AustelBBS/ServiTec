@@ -69,30 +69,38 @@ public class ServicioDeActividades extends Service {
         HashMap<String, String> actividadeNuevas;
         @Override
         protected Void doInBackground(Void... voids) {
-            actividadeNuevas = CentralDeConexiones.miServicioSocial.recuperarActividades();
+            actividadeNuevas = miServicioSocial.recuperarActividades();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Log.d(TAG, "Buscando cambios");
             SharedPreferences actividadesViejas = getSharedPreferences(CentralDeConexiones.ACTIVIDADES, 0);
             Set<String> llaves = actividadeNuevas.keySet();
             for(String llave: llaves){
                 String valorViejo = actividadesViejas.getString(llave, "Error");
                 String valorNuevo = actividadeNuevas.get(llave);
 
-                if(!(valorViejo == valorNuevo)) {
+                if(!valorViejo.equals(valorNuevo)) {
+                    guardar(llave, valorNuevo);
+                    // TODO: mostrar notificacion en lugar de una tostada
                     Toast.makeText(ServicioDeActividades.this, "Hubo un cambio en tus documentos" , Toast.LENGTH_SHORT).show();
                     Log.d(TAG,"llave:'" + llave + "'");
-                    Log.d(TAG, "valor en hashmap:'" + valorNuevo + "'");
-                    Log.d(TAG, "valor en preferences:'" + valorViejo + "'");
-                    break;
-
+                    Log.d(TAG, "valorNuevo en hashmap:'" + valorNuevo + "'");
+                    Log.d(TAG, "valorViejo en preferences:'" + valorViejo + "'");
                 }else {
-                    Log.d(TAG, "No se cambio nada");
+//                    Log.d(TAG, "No se cambio nada");
                 }
+
             }
+        }
+
+        void guardar(String actividad, String valor) {
+            SharedPreferences.Editor editor = getSharedPreferences(CentralDeConexiones.ACTIVIDADES, 0).edit();
+            editor.putString(actividad,valor);
+            editor.commit();
         }
     }
 
