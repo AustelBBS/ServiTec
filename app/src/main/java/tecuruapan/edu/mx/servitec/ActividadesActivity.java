@@ -1,6 +1,8 @@
 package tecuruapan.edu.mx.servitec;
 
 import android.annotation.TargetApi;
+import android.content.ComponentName;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -8,9 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
@@ -22,7 +25,8 @@ public class ActividadesActivity extends AppCompatActivity {
             imagenSegundo, imagenTercer, imagenGlobal, imagenTerminacion, imagenEvaluacion;
     HashMap<String, String> actividades;
 
-    Intent intentService;
+    static Intent intentService = null;
+    TextView cartaEva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,15 @@ public class ActividadesActivity extends AppCompatActivity {
         imagenTerminacion = (ImageView) findViewById(R.id.imagen_terminacion);
         imagenGlobal = (ImageView) findViewById(R.id.imagen_global);
         imagenEvaluacion = (ImageView) findViewById(R.id.imagen_evaluacion);
+
+        cartaEva = (TextView) findViewById(R.id.carta_eva);
+        cartaEva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ActividadesActivity.this, CartaEvaluacionActivity.class));
+            }
+        });
+
         actualizarEstados();
 
 //        stopService()
@@ -49,7 +62,7 @@ public class ActividadesActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.N)
     private HashMap<String, String> buscarCambios() {
         final HashMap<String, String> actividadesActualizadas = new HashMap<>();
-        final SharedPreferences estadosGuardados = getSharedPreferences(CentralDeConexiones.ACTIVIDADES, 0);
+        final SharedPreferences estadosGuardados = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
         actividades.forEach(new BiConsumer<String, String>() {
             @Override
             public void accept(String actividadActual , String estadoActual) {
@@ -68,7 +81,7 @@ public class ActividadesActivity extends AppCompatActivity {
 
 
 
-    private int imagenId (String tipo) {
+    public static int imagenId (String tipo) {
         switch (tipo) {
             case ServicioSocial.APROBADO:
                 return R.drawable.ic_aceptado;
@@ -78,13 +91,14 @@ public class ActividadesActivity extends AppCompatActivity {
                 return R.drawable.ic_defecto;
             default:
                 Log.e("ActividadesActivity", "Error, caso no esperado al obtener tipo de imagen.");
+                Log.e("ActividadesActivity", tipo);
                 return R.drawable.ic_revisado;
         }
     }
 
     @TargetApi(Build.VERSION_CODES.N)
     private void guardarEstados() {
-        final SharedPreferences.Editor estadosEditor = getSharedPreferences(CentralDeConexiones.ACTIVIDADES, 0).edit();
+        final SharedPreferences.Editor estadosEditor = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0).edit();
         actividades.forEach(new BiConsumer<String, String>() {
             @Override
             public void accept(String actividad, String estado) {
@@ -130,7 +144,9 @@ public class ActividadesActivity extends AppCompatActivity {
             super.onPostExecute(resultados);
             ponerImagenes(resultados);
             guardarEstados();
-            startService(new Intent(ActividadesActivity.this, ServicioDeActividades.class));
+            intentService = new Intent(ActividadesActivity.this, ServicioDeActividades.class);
+            startService(intentService);
+
         }
     }
 

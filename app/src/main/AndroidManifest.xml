@@ -3,6 +3,8 @@
     package="tecuruapan.edu.mx.servitec">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +28,9 @@
         <service
             android:name=".ServicioDeActividades"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".CartaEvaluacionActivity"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ package lib;
  */
 
 public class CentralDeConexiones {
-    public static final String  ACTIVIDADES = "estado_actividades";
+    public static final String ACTIVIDADES_GUARDADAS = "estado_actividades";
     public static ServicioSocial miServicioSocial;
 
 
