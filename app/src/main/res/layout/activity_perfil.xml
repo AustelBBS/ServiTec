@@ -169,7 +169,7 @@
         tools:layout_editor_absoluteY="188dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_contrasenia"
         android:layout_width="156dp"
         android:layout_height="43dp"
         android:layout_marginLeft="8dp"
@@ -183,17 +183,17 @@
         app:layout_constraintTop_toBottomOf="@+id/boton_perfil" />
 
     <Button
+        android:id="@+id/button_editar"
         android:layout_width="156dp"
         android:layout_height="43dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
         android:text="editar mi cuenta"
         android:textSize="10dp"
         app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintLeft_toRightOf="@+id/imageView_perfil"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/button_contrasenia" />
 
     <TextView
         android:id="@+id/tvDireccion"

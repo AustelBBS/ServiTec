@@ -28,7 +28,8 @@ public class ServicioSocial {
     public final static String APROBADO = "aprobado";
     public final static String VACIO = "vacio";
     public final static String ERROR = "error";
-    final static String URL_RAIZ = "http://192.168.1.74/ssocial/";
+//    final static String URL_RAIZ = "http://192.168.1.74/ssocial/";
+        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";
 
     final static String URL_BASE = URL_RAIZ + "index.php?modulo="; // la de mi casa
 //    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo="; // cuando uso el telefono?

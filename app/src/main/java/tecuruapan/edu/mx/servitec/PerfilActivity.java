@@ -34,6 +34,9 @@ public class PerfilActivity extends AppCompatActivity {
         textViewCorreo = (TextView) findViewById(R.id.tvCorreo);
         textViewPeriodo= (TextView) findViewById(R.id.tvPeriodo);
         imageViewPerfil = (ImageView) findViewById(R.id.imageView_perfil);
+        botonCambiarContrasenia = (Button) findViewById(R.id.button_contrasenia);
+        botonEditar = (Button) findViewById(R.id.button_editar);
+        botonCambiarImagen = (Button) findViewById(R.id.boton_perfil);
         botonCambiarContrasenia.setVisibility(View.INVISIBLE);
         botonEditar.setVisibility(View.INVISIBLE);
         botonCambiarImagen.setVisibility(View.INVISIBLE);
