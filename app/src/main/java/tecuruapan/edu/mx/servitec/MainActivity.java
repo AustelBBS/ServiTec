@@ -1,5 +1,6 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cerrarCesion();
+                new CerrarAsync().execute();
             }
         });
         AsyncTask<Void, Void, Void> networkTask = new AsyncTask<Void, Void, Void>() {
@@ -98,13 +99,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void cerrarCesion() {
-        try {
-            CentralDeConexiones.miServicioSocial.cerrarSesion();
-        } catch (Exception e) {
-            e.printStackTrace();
+    class CerrarAsync extends AsyncTask<Void, Void, Void>{
+        String error = "";
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                CentralDeConexiones.miServicioSocial.cerrarSesion();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                error = e.getMessage();
+            }
+            return null;
         }
-        // regresar a la pantalla de logeuo seria mas util
-        finish();
+
+        @Override
+        protected void onPostExecute(Void Void) {
+            if(error.isEmpty()){
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                startActivity(intent);
+                Toast.makeText(MainActivity.this, "Se ha cerrado tu sesión", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(MainActivity.this, "Wow hubo un problema al cerrar tu sesión", Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
 }

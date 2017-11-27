@@ -16,7 +16,7 @@
         app:layout_constraintVertical_bias="0.0"></include>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageView_perfil"
         android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_marginBottom="8dp"
@@ -43,7 +43,7 @@
         android:text="Matricula:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.077"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView_perfil"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/action_bar"
         app:layout_constraintVertical_bias="0.048" />
@@ -75,7 +75,7 @@
         android:text="Semestre:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.084"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView_perfil"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.0" />
@@ -107,7 +107,7 @@
         android:text="Carrera:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.074"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView_perfil"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:layout_constraintVertical_bias="0.004" />
@@ -135,7 +135,7 @@
         android:layout_marginLeft="17dp"
         android:layout_marginTop="7dp"
         android:text="ID Unico:"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView_perfil"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
@@ -163,13 +163,13 @@
         android:layout_marginTop="9dp"
         android:text="cambiar imagen de perfil"
         android:textSize="10dp"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView_perfil"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:layout_editor_absoluteY="188dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_contrasenia"
         android:layout_width="156dp"
         android:layout_height="43dp"
         android:layout_marginLeft="8dp"
@@ -178,120 +178,105 @@
         android:text="Cambiar contraseña"
         android:textSize="10dp"
         app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView_perfil"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/boton_perfil" />
 
     <Button
-        android:layout_width="156dp"
+        android:id="@+id/button_editar"
+        android:layout_width="0dp"
         android:layout_height="43dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="editarDatos"
         android:text="editar mi cuenta"
         android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintStart_toEndOf="@+id/tvNombre"
+        app:layout_constraintTop_toBottomOf="@+id/button_contrasenia" />
 
-    <TextView
-        android:id="@+id/tvDireccion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="13dp"
-        android:text="Dirección:"
-        android:textSize="18dp"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNombre" />
-
-    <TextView
+    <EditText
         android:id="@+id/tvNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="38dp"
-        android:text="Nombre: Orlando Vergara Hinojosa"
-        android:textSize="18dp"
-        app:layout_constraintHorizontal_bias="0.089"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        android:layout_marginBottom="3dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Nombre"
+        android:inputType="textPersonName"
+        android:text="Orlando Vergara Hinojosa"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvDireccion"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <EditText
+        android:id="@+id/tvDireccion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Dirección"
+        android:inputType="textPersonName"
+        android:text="Alguna calle 5"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvTelefono"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
         android:id="@+id/tvTelefono"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="13dp"
-        android:text="Teléfono:"
-        android:textSize="18dp"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDireccion" />
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Teléfono"
+        android:inputType="phone"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvCelular"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvCelular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="13dp"
-        android:text="Celular:"
-        android:textSize="18dp"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTelefono" />
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Celular"
+        android:inputType="phone"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvCorreo"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvCorreo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="13dp"
-        android:text="Correo:"
-        android:textSize="18dp"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCelular" />
+        android:layout_height="47dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Correo"
+        android:inputType="textEmailAddress"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvPeriodo"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvPeriodo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="13dp"
-        android:text="Periodo:"
-        android:textSize="18dp"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCorreo" />
-
-    <TextView
-        android:id="@+id/tvFecha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
-        android:text="fecha 00/00/00:"
-        android:textSize="18dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Periodo"
+        android:inputType="textPersonName"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPeriodo" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:enabled="false" />
+
 </android.support.constraint.ConstraintLayout>

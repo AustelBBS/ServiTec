@@ -168,6 +168,7 @@
         android:src="@drawable/ic_defecto" />
 
     <TextView
+        android:id="@+id/carta_eva"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"

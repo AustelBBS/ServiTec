@@ -1,11 +1,9 @@
 package tecuruapan.edu.mx.servitec;
 
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -15,11 +13,9 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.BiConsumer;
 
 import lib.CentralDeConexiones;
 
-import static android.content.ContentValues.TAG;
 import static lib.CentralDeConexiones.miServicioSocial;
 
 public class ServicioDeActividades extends Service {
@@ -77,7 +73,7 @@ public class ServicioDeActividades extends Service {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Log.d(TAG, "Buscando cambios");
-            SharedPreferences actividadesViejas = getSharedPreferences(CentralDeConexiones.ACTIVIDADES, 0);
+            SharedPreferences actividadesViejas = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
             Set<String> llaves = actividadeNuevas.keySet();
             for(String llave: llaves){
                 String valorViejo = actividadesViejas.getString(llave, "Error");
@@ -98,7 +94,7 @@ public class ServicioDeActividades extends Service {
         }
 
         void guardar(String actividad, String valor) {
-            SharedPreferences.Editor editor = getSharedPreferences(CentralDeConexiones.ACTIVIDADES, 0).edit();
+            SharedPreferences.Editor editor = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0).edit();
             editor.putString(actividad,valor);
             editor.commit();
         }

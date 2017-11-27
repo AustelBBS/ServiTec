@@ -28,16 +28,17 @@ public class ServicioSocial {
     public final static String APROBADO = "aprobado";
     public final static String VACIO = "vacio";
     public final static String ERROR = "error";
-//    final static String URL_BASE = "http://tecuruapan.edu.mx/ssocial/?modulo=";
-//    final static String URL_BASE = "http://localhost/ssocial/index.php?modulo=";
-    final static String URL_BASE = "http://192.168.1.74/ssocial/index.php?modulo=";
-//    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo=";
-    //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo=";
+//    final static String URL_RAIZ = "http://192.168.1.74/ssocial/";
+        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";
+
+    final static String URL_BASE = URL_RAIZ + "index.php?modulo="; // la de mi casa
+//    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo="; // cuando uso el telefono?
+    //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo="; // o es esta otra cuando uso el telefono?
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";
     final static String MI_CUENTA = "miCuenta";
     
-    final static String COOKIE_PHP = "PHPSESSID";
+    public final static String COOKIE_PHP = "PHPSESSID";
     
     private String noControl;
     private String pass;
@@ -326,7 +327,20 @@ public class ServicioSocial {
     private Connection conectar(String url) {
         return Jsoup.connect(url).cookie(COOKIE_PHP, cookie);
     }
-    
 
+    /**
+     * Devuelve el link de descarga del formato para que se encargue de bajarlo el sistema.
+     * @return
+     */
+    public String linkFormatoEvaluacionR() {
+        return URL_RAIZ + "documentos.php?cual=" + "Evaluacion_Receptora.docx";
+    }
+
+    public String linkSubirEvaluacion() {
+        return URL_BASE + "admin&avance=v_evaluacionReceptora";
+    }
+     public String getCookie() {
+        return cookie;
+     }
 
 }

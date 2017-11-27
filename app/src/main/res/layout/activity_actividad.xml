@@ -20,4 +20,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="file:///home/mar/.local/share/applications/jetbrains-studio.desktop"
+        tools:layout_editor_absoluteX="532dp"
+        tools:layout_editor_absoluteY="199dp" />
+
 </android.support.constraint.ConstraintLayout>
