@@ -1,8 +1,6 @@
 package tecuruapan.edu.mx.servitec;
 
 import android.annotation.TargetApi;
-import android.content.ComponentName;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -19,6 +17,7 @@ import java.util.function.BiConsumer;
 
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.CartaEvaluacionActivity;
 
 public class ActividadesActivity extends AppCompatActivity {
     ImageView imagenCurso, imagenPresentacion, imagenRegistro, imagenPrimer,

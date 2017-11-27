@@ -1,4 +1,4 @@
-package tecuruapan.edu.mx.servitec;
+package tecuruapan.edu.mx.servitec.ActividadesEscolares;
 
 import android.app.Activity;
 import android.app.DownloadManager;
@@ -26,6 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import lib.CentralDeConexiones;
+import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.R;
 
 public class CartaEvaluacionActivity extends AppCompatActivity {
     final static int codigo = 42;

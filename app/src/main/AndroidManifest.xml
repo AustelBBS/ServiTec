@@ -30,7 +30,15 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".CartaEvaluacionActivity"></activity>
+        <activity android:name=".ActividadesEscolares.CartaEvaluacionActivity" />
+        <activity android:name=".ActividadesEscolares.InformeGlobalActivity" />
+        <activity android:name=".ActividadesEscolares.PrimerInformeActivity" />
+        <activity android:name=".ActividadesEscolares.SegundoInformeActivity" />
+        <activity android:name=".ActividadesEscolares.TercerInformeActivity" />
+        <activity android:name=".ActividadesEscolares.SolicitudRegistroActivity" />
+        <activity android:name=".ActividadesEscolares.CursoInduccionActivity" />
+        <activity android:name=".ActividadesEscolares.CartaPresentacionActivity" />
+        <activity android:name=".ActividadesEscolares.OficioTerminacionActivity"></activity>
     </application>
 
 </manifest>
