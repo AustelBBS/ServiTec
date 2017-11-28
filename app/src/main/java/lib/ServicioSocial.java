@@ -38,7 +38,18 @@ public class ServicioSocial {
     final static String MI_CUENTA = "miCuenta";
     
     public final static String COOKIE_PHP = "PHPSESSID";
-    
+
+    public final static String TERCER_A = "Tercer Avance";
+    public final static String CURSO = "Asistencia en curso de Inducción";
+    public final static String SOLICITUD_RE  = "Solicitud de Registro Servicio Social";
+    public final static String  INFORME_G = "Informe Global";
+    public final static String CARTA_EV =  "Carta de evaluación receptora";
+    public final static String CARTA_PRE = "Solicitar carta de presentación";
+    public final static String SEGUNDO_A ="Segundo Avance";
+    public final static String OFICIO_T = "Oficio de Terminación";
+    public final static String PRIMER_A = "Primer avance";
+
+
     private String noControl;
     private String pass;
     private String cookie;
@@ -334,6 +345,15 @@ public class ServicioSocial {
     public String linkFormatoEvaluacionR() {
         return URL_RAIZ + "documentos.php?cual=" + "Evaluacion_Receptora.docx";
     }
+
+    public String linkFormatoSolicitudRe () {
+        return URL_RAIZ + "documentos.php?cual=" + "Solicitud_De_Registro.docx";
+    }
+    public String linkFormatoInformeBimestral () {
+        //http://localhost/ssocial/documentos.php?cual=Informe_Bimestral.docx
+        return URL_RAIZ + "documentos.php?cual=" + "Informe_Bimestral.docx";
+    }
+
 
     public String linkSubirEvaluacion() {
         return URL_BASE + "admin&avance=v_evaluacionReceptora";

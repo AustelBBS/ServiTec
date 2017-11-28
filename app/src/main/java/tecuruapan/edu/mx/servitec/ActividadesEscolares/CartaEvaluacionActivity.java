@@ -44,7 +44,7 @@ public class CartaEvaluacionActivity extends AppCompatActivity {
         botonDescargarFormato = (Button) findViewById(R.id.ev_bajar_formato);
         botonSubirArchivo = (Button) findViewById(R.id.ev_subir);
         textViewEstado = (TextView) findViewById(R.id.textview_ev_estado);
-        imageViewEstado = (ImageView) findViewById(R.id.imagen_ev_estado);
+        imageViewEstado = (ImageView) findViewById(R.id.imagen_estado_ta);
         botonDescargarFormato.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
