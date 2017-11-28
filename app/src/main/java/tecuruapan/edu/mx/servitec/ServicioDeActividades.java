@@ -18,7 +18,8 @@ import lib.CentralDeConexiones;
 
 import static lib.CentralDeConexiones.miServicioSocial;
 
-public class ServicioDeActividades extends Service {
+public class
+ServicioDeActividades extends Service {
     public final static String TAG = "ServicioActividades";
     public static final long  INTERVALO = 1000 * 30; // 60 segundos
     private Handler handler = new Handler();
