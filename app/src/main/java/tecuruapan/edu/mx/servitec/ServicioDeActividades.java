@@ -15,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import lib.CentralDeConexiones;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.ServicioDeNotificaciones;
 
 import static lib.CentralDeConexiones.miServicioSocial;
 
@@ -24,6 +25,7 @@ ServicioDeActividades extends Service {
     public static final long  INTERVALO = 1000 * 30; // 60 segundos
     private Handler handler = new Handler();
     private Timer timer = null;
+    private ServicioDeNotificaciones notificacion;
     public ServicioDeActividades() {
     }
 
@@ -35,6 +37,7 @@ ServicioDeActividades extends Service {
 
     @Override
     public void onCreate() {
+        notificacion = new ServicioDeNotificaciones();
         super.onCreate();
         // cancelar si ya existe
         if(timer != null){
@@ -84,6 +87,7 @@ ServicioDeActividades extends Service {
                     guardar(llave, valorNuevo);
                     // TODO: mostrar notificacion en lugar de una tostada
                     Toast.makeText(ServicioDeActividades.this, "Hubo un cambio en tus documentos" , Toast.LENGTH_SHORT).show();
+                    notificacion.enviarNotificacion(ServicioDeActividades.this);
                     Log.d(TAG,"llave:'" + llave + "'");
                     Log.d(TAG, "valorNuevo en hashmap:'" + valorNuevo + "'");
                     Log.d(TAG, "valorViejo en preferences:'" + valorViejo + "'");
