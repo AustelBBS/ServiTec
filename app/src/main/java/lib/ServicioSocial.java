@@ -28,10 +28,9 @@ public class ServicioSocial {
     public final static String APROBADO = "aprobado";
     public final static String VACIO = "vacio";
     public final static String ERROR = "error";
-//    final static String URL_RAIZ = "http://192.168.1.74/ssocial/";
-        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";
-
-    final static String URL_BASE = URL_RAIZ + "index.php?modulo="; // la de mi casa
+    final static String URL_RAIZ = "http://192.168.1.74/ssocial/";//la de mi casa
+//        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";// cuando uso el telefono como modem
+    final static String URL_BASE = URL_RAIZ + "index.php?modulo=";
 //    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo="; // cuando uso el telefono?
     //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo="; // o es esta otra cuando uso el telefono?
     final static String LOGUEO = "logeo";
