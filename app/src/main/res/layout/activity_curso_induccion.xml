@@ -4,6 +4,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="tecuruapan.edu.mx.servitec.ActividadesEscolares.CursoInduccionActivity">
+    tools:context="tecuruapan.edu.mx.servitec.ActividadesEscolares.CursoInduccionActivity"
+    tools:layout_editor_absoluteY="25dp">
+
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/action_bar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="3dp"></include>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Curso de Inducción"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="283dp"
+        android:layout_height="225dp"
+        android:layout_marginTop="29dp"
+        android:text="En este apartado se te muestra sí asististe o no al curso de inducción que es obligatorio para continuar con los siguientes pasos del trámite de liberación de servicio social. Sí tú asististe al curso de inducción y el sistema te marca lo contrario, comunícate a los teléfonos proporcionados en el área de contacto o acude a la oficina de servicio social para aclarar la situación."
+        android:textAlignment="center"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+
+    <TextView
+        android:id="@+id/textview_curso_estado"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="128dp"
+        android:text="Estado de mi archivo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <ImageView
+        android:id="@+id/imagen_estado_sr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="122dp"
+        android:src="@drawable/ic_revisado"
+        app:layout_constraintStart_toEndOf="@+id/textview_curso_estado"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
 
 </android.support.constraint.ConstraintLayout>

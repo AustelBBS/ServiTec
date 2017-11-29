@@ -18,14 +18,36 @@ import java.util.function.BiConsumer;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.CartaEvaluacionActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.CartaPresentacionActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.CursoInduccionActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.InformeGlobalActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.OficioTerminacionActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.PrimerInformeActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.SegundoInformeActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.SolicitudRegistroActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.TercerInformeActivity;
 
-public class ActividadesActivity extends AppCompatActivity {
-    ImageView imagenCurso, imagenPresentacion, imagenRegistro, imagenPrimer,
-            imagenSegundo, imagenTercer, imagenGlobal, imagenTerminacion, imagenEvaluacion;
+public class ActividadesActivity extends AppCompatActivity implements  View.OnClickListener{
+    ImageView imagenCurso,
+            imagenPresentacion,
+            imagenRegistro,
+            imagenPrimer,
+            imagenSegundo,
+            imagenTercer,
+            imagenGlobal,
+            imagenTerminacion,
+            imagenEvaluacion;
     HashMap<String, String> actividades;
-
     static Intent intentService = null;
-    TextView cartaEva;
+    TextView curso,
+            cartaPre,
+            solicitudRe,
+            primerA,
+            segundoA,
+            tercerA,
+            oficioT,
+            informeG,
+            cartaEva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +64,55 @@ public class ActividadesActivity extends AppCompatActivity {
         imagenGlobal = (ImageView) findViewById(R.id.imagen_global);
         imagenEvaluacion = (ImageView) findViewById(R.id.imagen_evaluacion);
 
+
+
+        curso = (TextView) findViewById(R.id.curso);
+        cartaPre = (TextView) findViewById(R.id.carta_Pre);
+        solicitudRe = (TextView) findViewById(R.id.solicitud_R);
+        primerA = (TextView) findViewById(R.id.primer_A);
+        segundoA = (TextView) findViewById(R.id.segundo_A);
+        tercerA = (TextView) findViewById(R.id.tercer_A);
+        oficioT = (TextView) findViewById(R.id.oficio_T);
+        informeG = (TextView) findViewById(R.id.informe_G);
         cartaEva = (TextView) findViewById(R.id.carta_eva);
-        cartaEva.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ActividadesActivity.this, CartaEvaluacionActivity.class));
-            }
-        });
+
+        curso.setTag("curso");
+        cartaPre.setTag("cartaP");
+        solicitudRe.setTag("solicitudR");
+        primerA.setTag("primerA");
+        segundoA.setTag("segundoA");
+        tercerA.setTag("tercerA");
+        oficioT.setTag("oficioT");
+        informeG.setTag("informeG");
+        cartaEva.setTag("cartaE");
+
+        curso.setOnClickListener(this);
+        cartaPre.setOnClickListener(this);
+        solicitudRe.setOnClickListener(this);
+        primerA.setOnClickListener(this);
+        segundoA.setOnClickListener(this);
+        tercerA.setOnClickListener(this);
+        oficioT.setOnClickListener(this);
+        informeG.setOnClickListener(this);
+        cartaEva.setOnClickListener(this);
 
         actualizarEstados();
+    }
 
-//        stopService()
 
+    public static int imagenId (String tipo) {
+        switch (tipo) {
+            case ServicioSocial.APROBADO:
+                return R.drawable.ic_aceptado;
+            case ServicioSocial.ERROR:
+                return R.drawable.ic_rechazado;
+            case ServicioSocial.VACIO:
+                return R.drawable.ic_defecto;
+            default:
+                Log.e("ActividadesActivity", "Error, caso no esperado al obtener tipo de imagen.");
+                Log.e("ActividadesActivity", tipo);
+                return R.drawable.ic_revisado;
+        }
     }
 
     // compara los estados de las actividades guardadas en persistentement
@@ -80,20 +139,6 @@ public class ActividadesActivity extends AppCompatActivity {
 
 
 
-    public static int imagenId (String tipo) {
-        switch (tipo) {
-            case ServicioSocial.APROBADO:
-                return R.drawable.ic_aceptado;
-            case ServicioSocial.ERROR:
-                return R.drawable.ic_rechazado;
-            case ServicioSocial.VACIO:
-                return R.drawable.ic_defecto;
-            default:
-                Log.e("ActividadesActivity", "Error, caso no esperado al obtener tipo de imagen.");
-                Log.e("ActividadesActivity", tipo);
-                return R.drawable.ic_revisado;
-        }
-    }
 
     @TargetApi(Build.VERSION_CODES.N)
     private void guardarEstados() {
@@ -115,19 +160,53 @@ public class ActividadesActivity extends AppCompatActivity {
             @TargetApi(Build.VERSION_CODES.N)
             @Override
             public void run() {
-                imagenTercer.setImageResource(imagenId(actividades.get("Tercer Avance")));
-                imagenCurso.setImageResource(imagenId(actividades.get("Asistencia en curso de Inducción")));
-                imagenRegistro.setImageResource(imagenId(actividades.get("Solicitud de Registro Servicio Social")));
-                imagenGlobal.setImageResource(imagenId(actividades.get("Informe Global")));
-                imagenEvaluacion.setImageResource(imagenId(actividades.get("Carta de evaluación receptora")));
-                imagenPresentacion.setImageResource(imagenId(actividades.get("Solicitar carta de presentación")));
-                imagenSegundo.setImageResource(imagenId(actividades.get("Segundo Avance")));
-                imagenTerminacion.setImageResource(imagenId(actividades.getOrDefault("Oficio de Terminación", "error")));
-                imagenPrimer.setImageResource(imagenId(actividades.get("Primer avance")));
+                imagenTercer.setImageResource(imagenId(actividades.get(ServicioSocial.TERCER_A)));
+                imagenCurso.setImageResource(imagenId(actividades.get(ServicioSocial.CURSO)));
+                imagenRegistro.setImageResource(imagenId(actividades.get(ServicioSocial.SOLICITUD_RE)));
+                imagenGlobal.setImageResource(imagenId(actividades.get(ServicioSocial.INFORME_G)));
+                imagenEvaluacion.setImageResource(imagenId(actividades.get(ServicioSocial.CARTA_EV)));
+                imagenPresentacion.setImageResource(imagenId(actividades.get(ServicioSocial.CARTA_PRE)));
+                imagenSegundo.setImageResource(imagenId(actividades.get(ServicioSocial.SEGUNDO_A)));
+                imagenTerminacion.setImageResource(imagenId(actividades.get(ServicioSocial.OFICIO_T)));
+                imagenPrimer.setImageResource(imagenId(actividades.get(ServicioSocial.PRIMER_A)));
 
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        String tag = view.getTag().toString();
+        switch (tag){
+            case "curso":
+                startActivity(new Intent(ActividadesActivity.this, CursoInduccionActivity.class));
+                break;
+            case "cartaP":
+                startActivity(new Intent(ActividadesActivity.this, CartaPresentacionActivity.class));
+                break;
+            case "solicitudR":
+                startActivity(new Intent(ActividadesActivity.this, SolicitudRegistroActivity.class));
+                break;
+            case "primerA":
+                startActivity(new Intent(ActividadesActivity.this, PrimerInformeActivity.class));
+                break;
+            case "segundoA":
+                startActivity(new Intent(ActividadesActivity.this, SegundoInformeActivity.class));
+                break;
+            case "tercerA":
+                startActivity(new Intent(ActividadesActivity.this, TercerInformeActivity.class));
+                break;
+            case "oficioT":
+                startActivity(new Intent(ActividadesActivity.this, OficioTerminacionActivity.class));
+                break;
+            case "informeG":
+                startActivity(new Intent(ActividadesActivity.this, InformeGlobalActivity.class));
+                break;
+            case "cartaE":
+                startActivity(new Intent(ActividadesActivity.this, CartaEvaluacionActivity.class));
+                break;
+        }
     }
 
     class NetworkTask extends AsyncTask<Void, Void, HashMap<String, String>>{

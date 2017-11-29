@@ -81,12 +81,12 @@
         android:layout_marginStart="86dp"
         android:layout_marginTop="44dp"
         android:text="Estado de mi archivo"
-        app:layout_constraintEnd_toStartOf="@+id/imagen_ev_estado"
+        app:layout_constraintEnd_toStartOf="@+id/imagen_estado_sr"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ev_subir" />
 
     <ImageView
-        android:id="@+id/imagen_ev_estado"
+        android:id="@+id/imagen_estado_sr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="98dp"
