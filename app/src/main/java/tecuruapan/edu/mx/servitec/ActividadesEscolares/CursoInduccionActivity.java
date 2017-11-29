@@ -17,7 +17,7 @@ public class CursoInduccionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curso_induccion);
-        estadoImageView = (ImageView) findViewById(R.id.imagen_estado_ta);
+        estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         estadoTextView = (TextView) findViewById(R.id.textview_curso_estado);
         actualizarDatos();
     }

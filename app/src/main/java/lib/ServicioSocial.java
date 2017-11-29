@@ -349,11 +349,20 @@ public class ServicioSocial {
     public String linkFormatoSolicitudRe () {
         return URL_RAIZ + "documentos.php?cual=" + "Solicitud_De_Registro.docx";
     }
+
     public String linkFormatoInformeBimestral () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Bimestral.docx
         return URL_RAIZ + "documentos.php?cual=" + "Informe_Bimestral.docx";
     }
 
+    public String linkFormatoInformeGlobal () {
+        //http://localhost/ssocial/documentos.php?cual=Informe_Global.docx
+        return URL_RAIZ + "documentos.php?cual=" + "Informe_Global.docx";
+    }
+    public String linkEjemploCartaAceptacion() {
+        //http://tecuruapan.edu.mx/ssocial/documentos.php?cual=encuestaservicio.pdf
+        return URL_RAIZ + "documentos.php?cual=" + "encuestaservicio.pdf";
+    }
 
     public String linkSubirEvaluacion() {
         return URL_BASE + "admin&avance=v_evaluacionReceptora";

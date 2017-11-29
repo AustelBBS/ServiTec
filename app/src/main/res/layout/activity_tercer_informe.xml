@@ -49,27 +49,29 @@
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <Button
-            android:id="@+id/ev_bajar_formato"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="descargarFormato"
-            android:text="Descargar formato"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="351dp" />
+    <Button
+        android:id="@+id/ev_bajar_formato"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:onClick="descargarFormato"
+        android:text="Descargar formato"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-        <Button
-            android:id="@+id/ev_subir"
-            android:layout_width="171dp"
-            android:layout_height="44dp"
-            android:onClick="subirDocumento"
-            android:text="Subir Archivo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="407dp" />
+    <Button
+        android:id="@+id/ev_subir"
+        android:layout_width="171dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="6dp"
+        android:onClick="subirDocumento"
+        android:text="Subir Archivo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ev_bajar_formato" />
 
     <TextView
         android:id="@+id/textView10"
@@ -91,17 +93,18 @@
         android:layout_marginStart="86dp"
         android:layout_marginTop="44dp"
         android:text="Estado de mi archivo"
-        app:layout_constraintEnd_toStartOf="@+id/imagen_estado_ta"
+        app:layout_constraintEnd_toStartOf="@+id/imagen_estado_sr"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ev_subir" />
 
-        <ImageView
-            android:id="@+id/imagen_estado_ta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="98dp"
-            android:src="@drawable/ic_revisado"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="480dp" />
+    <ImageView
+        android:id="@+id/imagen_estado_sr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="98dp"
+        android:layout_marginTop="29dp"
+        android:src="@drawable/ic_revisado"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ev_subir" />
 
     </android.support.constraint.ConstraintLayout>

@@ -28,6 +28,9 @@ public class SolicitudRegistroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solicitud_registro);
+
+        estadoTextView = (TextView) findViewById(R.id.estado_tx_sol_re);
+        estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         actualizarEstado();
     }
 

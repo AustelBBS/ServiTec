@@ -32,7 +32,7 @@ public class SegundoInformeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segundo_informe);
-        estadoImageView = (ImageView) findViewById(R.id.imagen_estado_ta);
+        estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         estadoTextView = (TextView) findViewById(R.id.textView_estado_sa);
         actualizarEstado();
 
