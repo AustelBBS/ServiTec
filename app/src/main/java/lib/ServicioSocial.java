@@ -36,7 +36,8 @@ public class ServicioSocial {
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";
     final static String MI_CUENTA = "miCuenta";
-    
+    final static String CARTA_PRESENTACION = "admin&avance=v_cartaPresentacion";
+
     public final static String COOKIE_PHP = "PHPSESSID";
 
     public final static String TERCER_A = "Tercer Avance";
@@ -49,7 +50,7 @@ public class ServicioSocial {
     public final static String OFICIO_T = "Oficio de Terminación";
     public final static String PRIMER_A = "Primer avance";
 
-
+    private String mensaje; //guarda el mesaje de respuesta en algunos metodos
     private String noControl;
     private String pass;
     private String cookie;
@@ -282,10 +283,11 @@ public class ServicioSocial {
         }
         
         return null;
-    }   
-    
+    }
+
     /**
-     * Actualiza los datos que salen en la sección de mi cuenta.
+     * Actualiza los datos que salen en la sección de mi cuenta. Si no se registran se devuelve false entonces hay que checar el mensaje de error en
+     * en la variable con ultimoMensaje()
      * @param nombre Se recomienda que empiece por apellidos
      * @param direccion Direccion completa
      * @param telefono Teléfono de casa
@@ -307,12 +309,24 @@ public class ServicioSocial {
                     .data("periodo", "3")
                     .data("guardar", "Guardar Cambios")
                     .post();
-            actualizadosConExito = respuesta.text().contains("DATOS ACTUALIZADOS CORRECTAMENTE");
+            Element aviso = respuesta.getElementById("aviso");
+            Element error = respuesta.getElementById("color");
+            if(aviso != null){
+                actualizadosConExito = aviso.text().contains("DATOS ACTUALIZADOS CORRECTAMENTE");
+                mensaje = aviso.text();
+            }
+            if(error != null){
+                actualizadosConExito = false;
+                mensaje = error.text();
+            }
+
+
         } catch (IOException ex) {
             Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
+            this.mensaje = "Se disparó una excepción: " + ex.getMessage();
             return false;
         }
-        
+
         return actualizadosConExito;
     }
 
@@ -370,5 +384,70 @@ public class ServicioSocial {
      public String getCookie() {
         return cookie;
      }
+    /**
+     * Devuelve el mensaje que haya sio almacenado y luego lo vacia.
+     * @return Algún posible mensaje de respuesta.
+     */
+    public String ultimoMensaje() {
+        String salida = mensaje;
+        this.mensaje = "";
+        return salida;
+    }
+
+    public HashMap<String, String> recuperarDatosCartaPresentacion() {
+        HashMap<String, String> datos = new HashMap<>();
+        try{
+            //http://localhost/ssocial/index.php?modulo=admin&avance=v_cartaPresentacion
+            Document doc = conectar(URL_BASE + CARTA_PRESENTACION).get();
+            String dependencia = doc.getElementById("dependencia").val();
+            String ambito = parsearSelect(doc.getElementById("ambito"));
+            String organismo = parsearSelect(doc.getElementById("organismo"));
+            String encargado = doc.getElementById("encargado").val();
+            String puesto = doc.getElementById("puesto").val();
+            String direccion = doc.getElementById("direccion").val();
+            String telefono = doc.getElementById("telefono").val();
+            String programa = doc.getElementById("programa").val();
+            String subprograma = doc.getElementById("subprograma").val();
+
+            String idia = parsearSelect(doc.getElementById("idia"));
+            String imes = parsearSelect(doc.getElementById("imes"));
+            String anyo = parsearSelect(doc.getElementById("anyo"));
+            String tdia = parsearSelect(doc.getElementById("tdia"));
+            String tmes = parsearSelect(doc.getElementById("tmes"));
+            String eanyo = parsearSelect(doc.getElementById("eanyo"));
+
+            datos.put("dependencia", dependencia);
+            datos.put("ambito", ambito);
+            datos.put("organismo", organismo);
+            datos.put("encargado", encargado);
+            datos.put("puesto", puesto);
+            datos.put("direccion", direccion);
+            datos.put("telefono", telefono);
+            datos.put("programa", programa);
+            datos.put("subprograma", subprograma);
+            datos.put("fechaInicio", idia + "/" + imes + "/" + anyo) ;
+            datos.put("fechaFinal", tdia + "/" + tmes + "/" + eanyo) ;
+
+        }catch(final Exception e) {
+            System.err.println("Error al recuperar mis datos:" + e.getMessage());
+        }
+
+        return datos;
+    }
+    /**
+     * Encuentra el valor seleccionado dentro del select (HTML).
+     * @param select Elemento HTML sobre el cual se busca.
+     * @return Valor que tenga el atributo de seleccionado en el spinner.
+     */
+    private String parsearSelect(Element select){
+        String valorSeleccionado = "";
+        for(int i = 0; i<select.childNodeSize(); i++) {
+            if(select.child(i).hasAttr("selected")){
+                valorSeleccionado = select.child(i).val();
+                break;
+            }
+        }
+        return valorSeleccionado;
+    }
 
 }

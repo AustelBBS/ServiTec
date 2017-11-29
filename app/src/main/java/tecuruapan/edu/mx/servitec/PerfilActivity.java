@@ -53,11 +53,11 @@ public class PerfilActivity extends AppCompatActivity {
 
 
         new bajarDatos().execute();
+        new bajarImagenAsyncTask().execute();
 
     }
 
     public void editarDatos(View sender){
-        Log.d("ActiviadesActivity", botonEditar.getText().toString());
         if(botonEditar.getText().equals("editar mi cuenta")){
             botonEditar.setText("guardar cambios");
             Log.d("ActiviadesActivity", botonEditar.getText().toString());
@@ -78,6 +78,9 @@ public class PerfilActivity extends AppCompatActivity {
             editTextCelular.setEnabled(false);
             editTextCorreo.setEnabled(false);
 //            editTextPeriodo.setEnabled(true);
+            if(validarDatos())
+                new subirDatosAsyncTask().execute();
+            new bajarDatos().execute();
         }
 
     }
@@ -89,20 +92,57 @@ public class PerfilActivity extends AppCompatActivity {
         Toast.makeText(this, "Ups!  Esto aún no funciona.", Toast.LENGTH_SHORT).show();
     }
 
+    private boolean validarDatos() {
+        boolean datosOk = true;
+        if(editTextNombre.getText().toString().isEmpty()){
+            Toast.makeText(this, "El nombre no puede ir vacío", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(editTextCorreo.getText().toString().isEmpty()){
+            Toast.makeText(this, "El correo no puede ir vacío", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(editTextCelular.getText().toString().isEmpty()){
+            Toast.makeText(this, "El celular no puede ir vacío", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(editTextTelefono.getText().toString().isEmpty()){
+            Toast.makeText(this, "El teléfono no puede ir vacío", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(editTextDireccion.getText().toString().isEmpty()){
+            Toast.makeText(this, "La dirección no puede ir vacía", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return datosOk;
+    }
+
+    class bajarImagenAsyncTask extends  AsyncTask<Void, Void, Void> {
+        Bitmap imagen;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            imagen = CentralDeConexiones.miServicioSocial.descargarImagen();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            imageViewPerfil.setImageBitmap(imagen);
+        }
+    }
+
 
      class bajarDatos extends AsyncTask<Void, Void, Void>{
             HashMap<String, String> datos;
-            Bitmap imagen;
          @Override
          protected Void doInBackground(Void... voids) {
              datos = CentralDeConexiones.miServicioSocial.recuperarMisDatos();
-             imagen = CentralDeConexiones.miServicioSocial.descargarImagen();
              return null;
          }
 
          @Override
          protected void onPostExecute(Void aVoid) {
-             imageViewPerfil.setImageBitmap(imagen);
              textViewMatricula.setText(datos.get("matricula"));
              textViewSemestre.setText(datos.get("semestre"));
              textViewCarrera.setText(datos.get("carrera"));
@@ -115,6 +155,31 @@ public class PerfilActivity extends AppCompatActivity {
              editTextPeriodo.setText(datos.get("periodo"));
          }
      }
+     class subirDatosAsyncTask extends AsyncTask<Void, Void, Void>{
+        String resultado;
+         @Override
+         protected void onPreExecute() {
+             super.onPreExecute();
+         }
 
+         @Override
+         protected Void doInBackground(Void... voids) {
+             String nombre = editTextNombre.getText().toString();
+             String direccion = editTextDireccion.getText().toString();
+             String telefono = editTextTelefono.getText().toString();
+             String celular = editTextCelular.getText().toString();
+             String correo = editTextCorreo.getText().toString();
+             String periodo = editTextPeriodo.getText().toString();
+             CentralDeConexiones.miServicioSocial.actualizarMisDatos(nombre, direccion, telefono, celular, correo, periodo);
+             resultado = CentralDeConexiones.miServicioSocial.ultimoMensaje();
+             return null;
+         }
+
+         @Override
+         protected void onPostExecute(Void aVoid) {
+             super.onPostExecute(aVoid);
+             Toast.makeText(PerfilActivity.this, resultado, Toast.LENGTH_SHORT).show();
+         }
+     }
 
 }

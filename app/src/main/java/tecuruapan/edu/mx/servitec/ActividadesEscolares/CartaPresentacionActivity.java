@@ -1,6 +1,7 @@
 package tecuruapan.edu.mx.servitec.ActividadesEscolares;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
@@ -36,7 +38,9 @@ public class CartaPresentacionActivity extends AppCompatActivity {
     fechaFinEditText;
 
     Spinner ambitoSpinner,
-    tipoOrgSpinner;
+    orgSpinner;
+    ArrayList<String> ambitos = new ArrayList<String>();
+    ArrayList<String> organismos = new ArrayList<String>();
 
     Button botonDatos;
 
@@ -61,20 +65,20 @@ public class CartaPresentacionActivity extends AppCompatActivity {
         fechaIniEditText= (EditText) findViewById(R.id.editText_fecha_inicio);
         fechaFinEditText = (EditText) findViewById(R.id.editText_fecha_fin);
         ambitoSpinner = (Spinner) findViewById(R.id.spinner_ambito);
-        tipoOrgSpinner = (Spinner) findViewById(R.id.spinner_organismo);
+        orgSpinner = (Spinner) findViewById(R.id.spinner_organismo);
 
-        ArrayList<String> ambitos = new ArrayList<String>();
+
         ambitos.add("Federal");
         ambitos.add("Municipal");
         ambitos.add("Estatal");
         ambitos.add("Privado");
         ambitoSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ambitos));
 
-        ArrayList<String> tipos = new ArrayList<String>();
-        tipos.add("Público");
-        tipos.add("Privado");
-        tipos.add("Otro");
-        tipoOrgSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tipos));
+
+        organismos.add("Público");
+        organismos.add("Privado");
+        organismos.add("Otro");
+        orgSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, organismos));
 
         activarEntradas(false);
         ponerDatos();
@@ -83,6 +87,7 @@ public class CartaPresentacionActivity extends AppCompatActivity {
 
     private void ponerDatos() {
         // poner datos en las entradas;
+        new BajarDatos().execute();
     }
 
     public void actualizarEstado() {
@@ -127,7 +132,47 @@ public class CartaPresentacionActivity extends AppCompatActivity {
         fechaIniEditText.setEnabled(activados);
         fechaFinEditText.setEnabled(activados);
         ambitoSpinner.setEnabled(activados);
-        tipoOrgSpinner.setEnabled(activados);
+        orgSpinner.setEnabled(activados);
 
+    }
+    class BajarDatos extends AsyncTask<Void, Void, Void>{
+        HashMap<String, String> datos;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            datos = CentralDeConexiones.miServicioSocial.recuperarDatosCartaPresentacion();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            nombreDependenciaEditText.setText(datos.get("dependencia"));
+            String ambito = datos.get("ambito");
+            String organismo = datos.get("organismo");
+            ponerAmbito(ambito);
+            ponerOrganismo(organismo);
+            encargadoEditText.setText(datos.get("encargado"));
+            puestoEditText.setText(datos.get("puesto"));
+            direccionEditText.setText(datos.get("direccion"));
+            telefonoEditText.setText(datos.get("telefono"));
+            programaEditText.setText(datos.get("programa"));
+            subprogramaEditText.setText(datos.get("subprograma"));
+            fechaIniEditText.setText(datos.get("fechaInicio"));
+            fechaFinEditText.setText(datos.get("fechaFinal"));
+        }
+    }
+
+    private void ponerOrganismo(String organismo) {
+        orgSpinner.setSelection(organismos.indexOf(organismo));
+    }
+
+    private void ponerAmbito(String ambito) {
+        ambitoSpinner.setSelection(ambitos.indexOf(ambito));
+    }
+
+    private boolean validarEntradas() {
+        boolean datosOk = true;
+
+        return datosOk;
     }
 }
