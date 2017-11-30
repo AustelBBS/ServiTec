@@ -11,9 +11,10 @@ import android.widget.Toast;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
 
-public class OficioTerminacionActivity extends AppCompatActivity {
+public class OficioTerminacionActivity extends AppCompatActivity implements InterfaceDeActualizacion{
 
     TextView estadoTextView;
     ImageView estadoImageView;
@@ -26,7 +27,15 @@ public class OficioTerminacionActivity extends AppCompatActivity {
         estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         estadoTextView = (TextView) findViewById(R.id.textView_estado_ot);
         actualizarEstado();
+        DaemonDeActividades.registrarInterfaz(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
+    }
+
     public void actualizarEstado() {
         SharedPreferences preferences = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
         String estado = preferences.getString(ServicioSocial.OFICIO_T, "error");
@@ -44,5 +53,10 @@ public class OficioTerminacionActivity extends AppCompatActivity {
 
     public void subirDocumento(View sender) {
 
+    }
+
+    @Override
+    public void actualizar() {
+        actualizarEstado();
     }
 }

@@ -396,6 +396,7 @@ public class ServicioSocial {
     private String interpretarEstado(String estado) {
         estado = estado.substring(7,estado.length() - 4);
         if(estado.equals("acio")) return "vacio";
+//        if(estado.contains("probado")) return "aprobado"; NO por que hy uun estado llamado reprobado
         return estado;
     }
     

@@ -10,8 +10,9 @@ import android.widget.TextView;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
-public class TercerInformeActivity extends AppCompatActivity {
+public class TercerInformeActivity extends AppCompatActivity implements InterfaceDeActualizacion{
 
 
     TextView estadoTextView;
@@ -25,7 +26,15 @@ public class TercerInformeActivity extends AppCompatActivity {
         estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         estadoTextView = (TextView) findViewById(R.id.textView_estado_ta);
         actualizarEstado();
+        DaemonDeActividades.registrarInterfaz(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
+    }
+
     public void actualizarEstado() {
         SharedPreferences preferences = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
         String estado = preferences.getString(ServicioSocial.TERCER_A, "error");
@@ -43,4 +52,8 @@ public class TercerInformeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void actualizar() {
+        actualizarEstado();
+    }
 }

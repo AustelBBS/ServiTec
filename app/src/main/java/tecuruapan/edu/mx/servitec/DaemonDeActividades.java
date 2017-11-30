@@ -9,24 +9,36 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import lib.CentralDeConexiones;
-import tecuruapan.edu.mx.servitec.ActividadesEscolares.ServicioDeNotificaciones;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.InterfaceDeActualizacion;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.NotificacionPush;
 
 import static lib.CentralDeConexiones.miServicioSocial;
 
     public class
-ServicioDeActividades extends Service {
+    DaemonDeActividades extends Service {
     public final static String TAG = "ServicioActividades";
-    public static final long  INTERVALO = 1000 * 30; // 60 segundos
+    public static final long  INTERVALO = 1000 * 30; // 30 segundos
     private Handler handler = new Handler();
     private Timer timer = null;
-    private ServicioDeNotificaciones notificacion;
-    public ServicioDeActividades() {
+    private NotificacionPush notificacion;
+
+    public static ArrayList<InterfaceDeActualizacion> actividadesPorActualizar = new ArrayList<>();
+
+    public DaemonDeActividades() {
+
+    }
+    public static void registrarInterfaz(InterfaceDeActualizacion inter) {
+        actividadesPorActualizar.add(inter);
+    }
+    public static void removerInterfaz(InterfaceDeActualizacion inter) {
+        actividadesPorActualizar.remove(inter);
     }
 
     @Override
@@ -37,7 +49,7 @@ ServicioDeActividades extends Service {
 
     @Override
     public void onCreate() {
-        notificacion = new ServicioDeNotificaciones();
+        notificacion = new NotificacionPush();
         super.onCreate();
         // cancelar si ya existe
         if(timer != null){
@@ -85,9 +97,11 @@ ServicioDeActividades extends Service {
 
                 if(!valorViejo.equals(valorNuevo)) {
                     guardar(llave, valorNuevo);
-                    // TODO: mostrar notificacion en lugar de una tostada
-                    Toast.makeText(ServicioDeActividades.this, "Hubo un cambio en tus documentos" , Toast.LENGTH_SHORT).show();
-                    notificacion.enviarNotificacion(ServicioDeActividades.this);
+                    for(InterfaceDeActualizacion inter: actividadesPorActualizar) {
+                        inter.actualizar();
+                    }
+//                    Toast.makeText(DaemonDeActividades.this, "Hubo un cambio en tus documentos" , Toast.LENGTH_SHORT).show();
+                    notificacion.enviarNotificacion(DaemonDeActividades.this, llave + " ha pasado a: " + valorNuevo);
                     Log.d(TAG,"llave:'" + llave + "'");
                     Log.d(TAG, "valorNuevo en hashmap:'" + valorNuevo + "'");
                     Log.d(TAG, "valorViejo en preferences:'" + valorViejo + "'");

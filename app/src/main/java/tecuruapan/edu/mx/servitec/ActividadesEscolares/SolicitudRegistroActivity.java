@@ -18,8 +18,9 @@ import android.widget.Toast;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
-public class SolicitudRegistroActivity extends AppCompatActivity {
+public class SolicitudRegistroActivity extends AppCompatActivity implements InterfaceDeActualizacion{
     TextView estadoTextView;
     ImageView estadoImageView;
     private BroadcastReceiver downloadReceiver;
@@ -32,6 +33,13 @@ public class SolicitudRegistroActivity extends AppCompatActivity {
         estadoTextView = (TextView) findViewById(R.id.estado_tx_sol_re);
         estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         actualizarEstado();
+        DaemonDeActividades.registrarInterfaz(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
     }
 
     public void actualizarEstado() {
@@ -67,5 +75,10 @@ public class SolicitudRegistroActivity extends AppCompatActivity {
 
     public void subirSolicitud(View sender) {
 
+    }
+
+    @Override
+    public void actualizar() {
+        actualizarEstado();
     }
 }

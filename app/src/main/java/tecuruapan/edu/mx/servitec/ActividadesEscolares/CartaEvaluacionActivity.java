@@ -27,9 +27,10 @@ import java.net.URL;
 
 import lib.CentralDeConexiones;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
 
-public class CartaEvaluacionActivity extends AppCompatActivity {
+public class CartaEvaluacionActivity extends AppCompatActivity implements InterfaceDeActualizacion{
     final static int codigo = 42;
     Button botonDescargarFormato,
             botonSubirArchivo;
@@ -58,8 +59,15 @@ public class CartaEvaluacionActivity extends AppCompatActivity {
             }
         });
         ponerEstado();
+
+        DaemonDeActividades.registrarInterfaz(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -113,6 +121,11 @@ public class CartaEvaluacionActivity extends AppCompatActivity {
 
     private void subirDocumento(Uri uri) {
         new UploadFileAsync().execute(uri.toString());
+    }
+
+    @Override
+    public void actualizar() {
+        ponerEstado();
     }
 
 

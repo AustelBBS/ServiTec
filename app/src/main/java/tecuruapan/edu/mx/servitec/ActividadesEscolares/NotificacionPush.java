@@ -13,9 +13,9 @@ import tecuruapan.edu.mx.servitec.R;
  * Created by orveh on 11/27/2017.
  */
 
-public class ServicioDeNotificaciones {
+public class NotificacionPush {
 
-    public void enviarNotificacion(Context context) {
+    public void enviarNotificacion(Context context, String mensaje) {
         //TODO: usar un icono custom
         NotificationCompat.Builder mConstructor = new NotificationCompat.Builder(context);
         Intent intent = new Intent(context, ActividadesActivity.class);
@@ -24,7 +24,7 @@ public class ServicioDeNotificaciones {
         PendingIntent contentIntent = PendingIntent.getActivity(context, (int) (Math.random() * 100), intent, 0);
         mConstructor.setSmallIcon(R.drawable.ic_notificacion);
         mConstructor.setContentTitle("Cambio en documentos");
-        mConstructor.setContentText("Hubo cambios");
+        mConstructor.setContentText(mensaje);
         mConstructor.setContentIntent(contentIntent);
         //Instancia de servicio de NotficationManager
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

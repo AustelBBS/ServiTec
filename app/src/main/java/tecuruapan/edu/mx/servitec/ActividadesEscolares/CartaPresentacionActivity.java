@@ -20,10 +20,11 @@ import java.util.HashMap;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
 
 
-public class CartaPresentacionActivity extends AppCompatActivity {
+public class CartaPresentacionActivity extends AppCompatActivity implements InterfaceDeActualizacion {
     private long downloadID;
 
     TextView estadoTextView;
@@ -83,6 +84,13 @@ public class CartaPresentacionActivity extends AppCompatActivity {
         activarEntradas(false);
         ponerDatos();
         actualizarEstado();
+        DaemonDeActividades.registrarInterfaz(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
     }
 
     private void ponerDatos() {
@@ -137,6 +145,12 @@ public class CartaPresentacionActivity extends AppCompatActivity {
         orgSpinner.setEnabled(activados);
 
     }
+
+    @Override
+    public void actualizar() {
+        actualizarEstado();
+    }
+
     class BajarDatos extends AsyncTask<Void, Void, Void>{
         HashMap<String, String> datos;
         @Override
