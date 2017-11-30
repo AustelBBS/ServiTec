@@ -194,8 +194,58 @@ public class ServicioSocial {
 
         return actividades;
     }
-    
-    
+
+    public boolean actualizarDatosDependencia(String dependencia, String ambito, String tipo, String encargado, String puesto, String direccion, String telefono, String programa, String subprograma, String fechaIni, String fechaFin) {
+        boolean actualizadosConExito = false;
+        try {
+            String fechasIni[] = fechaIni.split("/");
+            String idia = String.valueOf(Integer.valueOf(fechasIni[0]));
+            String imes = String.valueOf(Integer.valueOf(fechasIni[1]));
+            String ianyo = String.valueOf(Integer.valueOf(fechasIni[2]));
+            String fechasFin[] = fechaFin.split("/");
+            String tdia = String.valueOf(Integer.valueOf(fechasFin[0]));
+            String tmes = String.valueOf(Integer.valueOf(fechasFin[1]));
+            String tanyo = String.valueOf(Integer.valueOf(fechasFin[2]));
+
+            Document respuesta = conectar(URL_BASE + CARTA_PRESENTACION)
+                    .data("dependencia", dependencia)
+                    .data("ambito", ambito)
+                    .data("organismo", tipo)
+                    .data("encargado", encargado)
+                    .data("puesto", puesto)
+                    .data("direccion", direccion)
+                    .data("telefono", telefono)
+                    .data("programa", programa)
+                    .data("subprograma", subprograma)
+                    .data("idia", idia)
+                    .data("imes", imes)
+                    .data("ianyo", ianyo)
+                    .data("tdia", tdia)
+                    .data("tmes", tmes)
+                    .data("tanyo", tanyo)
+                    .data("solicitar", "Guardar Datos")
+                    .post();
+            Element aviso = respuesta.getElementById("aviso");
+            Element error = respuesta.getElementById("color");
+            if(aviso != null){
+                actualizadosConExito = aviso.text().contains("actualizada correctamente");
+                mensaje = aviso.text();
+            }
+            if(error != null){
+                actualizadosConExito = false;
+                Elements otrosErrores = respuesta.getElementsByClass("rightTxt1");
+                mensaje = error.text();
+                mensaje = mensaje + "\n" + otrosErrores.text();
+//                System.err.println(respuesta.outerHtml());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
+            this.mensaje = "Se disparó una excepción: " + ex.getMessage();
+            return false;
+        }
+
+        return actualizadosConExito;
+    }
    
     /**
      * Devuelve todos los datos del estudiante registrado: nombre, dirección, teléfono, celular, correo, matrícula, idUnico, carrera, semestre, 
@@ -352,30 +402,38 @@ public class ServicioSocial {
         return Jsoup.connect(url).cookie(COOKIE_PHP, cookie);
     }
 
+    public final static String ARCHIVO_EV_RE = "Evaluacion_Receptora.docx";
     /**
      * Devuelve el link de descarga del formato para que se encargue de bajarlo el sistema.
      * @return
      */
     public String linkFormatoEvaluacionR() {
-        return URL_RAIZ + "documentos.php?cual=" + "Evaluacion_Receptora.docx";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_EV_RE;
     }
-
+    public final String ARCHIVO_SOLICITUD_RE = "Solicitud_De_Registro.docx";
     public String linkFormatoSolicitudRe () {
-        return URL_RAIZ + "documentos.php?cual=" + "Solicitud_De_Registro.docx";
+        return URL_RAIZ + "documentos.php?cual=" + SOLICITUD_RE;
     }
 
+    public final static String ARCHIVO_INFORME_BI = "Informe_Bimestral.docx";
     public String linkFormatoInformeBimestral () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Bimestral.docx
-        return URL_RAIZ + "documentos.php?cual=" + "Informe_Bimestral.docx";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_INFORME_BI;
     }
-
+    public final static String ARCHIVO_INFORME_G = "Informe_Global.docx";
     public String linkFormatoInformeGlobal () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Global.docx
-        return URL_RAIZ + "documentos.php?cual=" + "Informe_Global.docx";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_INFORME_G;
     }
+
+    public static final String ARCHIVO_CARTA_A = "encuestaservicio.pdf";
+    /**
+     * Este es el formato de descarga que ofrece la página dee la carta de presentacion
+     * @return el link
+     */
     public String linkEjemploCartaAceptacion() {
         //http://tecuruapan.edu.mx/ssocial/documentos.php?cual=encuestaservicio.pdf
-        return URL_RAIZ + "documentos.php?cual=" + "encuestaservicio.pdf";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_CARTA_A;
     }
 
     public String linkSubirEvaluacion() {

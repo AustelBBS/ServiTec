@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
@@ -35,9 +36,10 @@ public class OficioTerminacionActivity extends AppCompatActivity {
 
 
     public void descargarFormato(View sender) {
-        downloadQueueId = CentralDeConexiones.descargar(this, ""
-                , "Ejemplo de Carta de Terminación",
-                "Descargando el formato de la carta de terminación");
+        Toast.makeText(this, "Ups! aun no se habilita esta descarga!", Toast.LENGTH_SHORT).show();
+//        downloadQueueId = CentralDeConexiones.descargar(this, ""
+//                , "Ejemplo de Carta de Terminación",
+//                "Descargando el formato de la carta de terminación");
     }
 
     public void subirDocumento(View sender) {

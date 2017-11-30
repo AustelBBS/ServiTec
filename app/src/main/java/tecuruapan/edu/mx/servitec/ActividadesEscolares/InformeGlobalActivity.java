@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import lib.CentralDeConexiones;
@@ -35,7 +36,7 @@ public class InformeGlobalActivity extends AppCompatActivity {
     public void descargarFormato(View sender) {
         downloadQueueId = CentralDeConexiones.descargar(this, CentralDeConexiones.miServicioSocial.linkFormatoInformeGlobal()
                 , "Formato de Informe Global",
-                "Descargando el formato de Informe Global.");
+                "Descargando el formato de Informe Global.", ServicioSocial.ARCHIVO_INFORME_G);
     }
 
     public void subirDocumento(View sender) {
