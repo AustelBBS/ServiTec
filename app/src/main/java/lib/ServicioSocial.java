@@ -24,22 +24,27 @@ import org.jsoup.select.Elements;
  *
  */
 public class ServicioSocial {
-    // estados
-    public final static String APROBADO = "aprobado";
-    public final static String VACIO = "vacio";
-    public final static String ERROR = "error";
+
     final static String URL_RAIZ = "http://192.168.1.74/ssocial/";//la de mi casa
 //        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";// cuando uso el telefono como modem
     final static String URL_BASE = URL_RAIZ + "index.php?modulo=";
 //    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo="; // cuando uso el telefono?
     //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo="; // o es esta otra cuando uso el telefono?
+    // modulos
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";
     final static String MI_CUENTA = "miCuenta";
     final static String CARTA_PRESENTACION = "admin&avance=v_cartaPresentacion";
+    final static String MI_CLAVE = "miClave";
 
     public final static String COOKIE_PHP = "PHPSESSID";
 
+    // estados
+    public final static String APROBADO = "aprobado";
+    public final static String VACIO = "vacio";
+    public final static String ERROR = "error";
+
+    //
     public final static String TERCER_A = "Tercer Avance";
     public final static String CURSO = "Asistencia en curso de Inducción";
     public final static String SOLICITUD_RE  = "Solicitud de Registro Servicio Social";
@@ -491,6 +496,38 @@ public class ServicioSocial {
         }
 
         return datos;
+    }
+
+    public boolean cambiarPass(String passActual, String passNuevo, String passNuevoConfirmacion){
+        boolean passCambiado = false;
+        try {
+            //http://localhost/ssocial/index.php?modulo=miClave
+            Document respuesta = conectar(URL_BASE + MI_CLAVE)
+                    .data("actual", passActual)
+                    .data("nuevo", passNuevo)
+                    .data("repite", passNuevoConfirmacion)
+                    .data("guardar", "Guardar Cambios")
+                    .post();
+
+            Element aviso = respuesta.getElementById("aviso");
+            Element error = respuesta.getElementById("color");
+            if(aviso != null){
+                passCambiado = aviso.text().contains("actualizada correctamente");
+                mensaje = aviso.text();
+            }
+            if(error != null){
+                passCambiado = false;
+                mensaje = error.text();
+//                System.err.println(respuesta.outerHtml());
+            }
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
+            this.mensaje = "Se disparó una excepción: " + ex.getMessage();
+            return false;
+        }
+        return passCambiado;
     }
     /**
      * Encuentra el valor seleccionado dentro del select (HTML).
