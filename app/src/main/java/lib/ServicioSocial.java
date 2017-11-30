@@ -36,6 +36,7 @@ public class ServicioSocial {
     final static String MI_CUENTA = "miCuenta";
     final static String CARTA_PRESENTACION = "admin&avance=v_cartaPresentacion";
     final static String MI_CLAVE = "miClave";
+    final static String REGISTRO = "registro";
 
     public final static String COOKIE_PHP = "PHPSESSID";
 
@@ -55,7 +56,7 @@ public class ServicioSocial {
     public final static String OFICIO_T = "Oficio de Terminación";
     public final static String PRIMER_A = "Primer avance";
 
-    private String mensaje; //guarda el mesaje de respuesta en algunos metodos
+    private static String mensaje = ""; //guarda el mesaje de respuesta en algunos metodos
     private String noControl;
     private String pass;
     private String cookie;
@@ -451,9 +452,9 @@ public class ServicioSocial {
      * Devuelve el mensaje que haya sio almacenado y luego lo vacia.
      * @return Algún posible mensaje de respuesta.
      */
-    public String ultimoMensaje() {
+    public static String ultimoMensaje() {
         String salida = mensaje;
-        this.mensaje = "";
+        mensaje = "";
         return salida;
     }
 
@@ -544,5 +545,32 @@ public class ServicioSocial {
         }
         return valorSeleccionado;
     }
+
+    public static String intentarRegistro(String noControl) {
+        String resultado = "";
+        try {
+            Document respuesta = Jsoup.connect(URL_BASE + REGISTRO)
+                    .data("noControl", noControl)
+                    .data("registro", "Enviar")
+                    .post();
+            Element aviso = respuesta.getElementsByClass("verde").first();
+            Element cuerpoAviso = respuesta.getElementsByClass("rightTxt1").first();
+            if(cuerpoAviso != null){
+                mensaje = cuerpoAviso.text();
+            }
+            if(aviso != null) {
+                return aviso.text();
+            }else {
+                aviso = respuesta.getElementsByClass("rojo").first();
+                if(aviso != null)
+                    return aviso.text();
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "error";
+    }
+
 
 }
