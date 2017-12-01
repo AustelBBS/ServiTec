@@ -1,7 +1,6 @@
 package tecuruapan.edu.mx.servitec;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -18,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 import lib.CentralDeConexiones;
@@ -37,6 +37,9 @@ public class PerfilActivity extends AppCompatActivity {
             botonCambiarContrasenia, 
             botonEditar;
     ImageView imageViewPerfil;
+    TextView fecha;
+    ProgressBar progressBar;
+    EditText passActual, passNuevo, passConfirmacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +59,15 @@ public class PerfilActivity extends AppCompatActivity {
         botonCambiarContrasenia = (Button) findViewById(R.id.button_contrasenia);
         botonEditar = (Button) findViewById(R.id.button_editar);
         botonCambiarImagen = (Button) findViewById(R.id.boton_perfil);
-
+        fecha = (TextView) findViewById(R.id.tvFecha);
 
         new bajarDatos().execute();
         new bajarImagenAsyncTask().execute();
+        long date = System.currentTimeMillis();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
+        String fechaCadena = sdf.format(date);
+        fecha.setText(fechaCadena);
     }
 
     public void editarDatos(View sender){
@@ -90,15 +97,14 @@ public class PerfilActivity extends AppCompatActivity {
         }
 
     }
+
     public void cambiarFoto(View sender) {
         Toast.makeText(this, "Ups! Esto aún no funciona.", Toast.LENGTH_SHORT).show();
     }
 
-    ProgressBar progressBar;
-    EditText passActual, passNuevo, passConfirmacion;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void cambiarContrasenia(View sender) {
-        // istas que forman el dialogo
+        // vistas que forman el dialogo
         View vista = getLayoutInflater().inflate(R.layout.cambio_pass_dialog_layout, null);
         progressBar  = (ProgressBar) vista.findViewById(R.id.progressBarCambioPass);
         passActual = (EditText) vista.findViewById(R.id.passactualEditText);
@@ -120,6 +126,11 @@ public class PerfilActivity extends AppCompatActivity {
                 final Button botonOk = dialogo.getButton(AlertDialog.BUTTON_POSITIVE);
                 final Button botonCancelar = dialogo.getButton(AlertDialog.BUTTON_NEGATIVE);
                 botonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new CambiarPassAsyncTask().execute();
+                    }
+
                     class CambiarPassAsyncTask extends AsyncTask<Void, Void, Void> {
 
                         @Override
@@ -145,11 +156,6 @@ public class PerfilActivity extends AppCompatActivity {
                             Toast.makeText(PerfilActivity.this, CentralDeConexiones.miServicioSocial.ultimoMensaje(), Toast.LENGTH_SHORT).show();
                             dialogo.dismiss();
                         }
-                    }
-
-                    @Override
-                    public void onClick(View view) {
-                        new CambiarPassAsyncTask().execute();
                     }
                 });
             }

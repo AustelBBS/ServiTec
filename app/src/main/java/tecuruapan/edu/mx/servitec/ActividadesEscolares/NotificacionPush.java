@@ -26,6 +26,7 @@ public class NotificacionPush {
         mConstructor.setContentTitle("Cambio en documentos");
         mConstructor.setContentText(mensaje);
         mConstructor.setContentIntent(contentIntent);
+        mConstructor.setAutoCancel(true);
         //Instancia de servicio de NotficationManager
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
