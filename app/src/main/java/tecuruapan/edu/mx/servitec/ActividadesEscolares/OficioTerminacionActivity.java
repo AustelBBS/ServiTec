@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
 
-public class OficioTerminacionActivity extends AppCompatActivity {
+public class OficioTerminacionActivity extends AppCompatActivity implements InterfaceDeActualizacion{
 
     TextView estadoTextView;
     ImageView estadoImageView;
@@ -25,7 +27,15 @@ public class OficioTerminacionActivity extends AppCompatActivity {
         estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         estadoTextView = (TextView) findViewById(R.id.textView_estado_ot);
         actualizarEstado();
+        DaemonDeActividades.registrarInterfaz(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
+    }
+
     public void actualizarEstado() {
         SharedPreferences preferences = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
         String estado = preferences.getString(ServicioSocial.OFICIO_T, "error");
@@ -35,12 +45,18 @@ public class OficioTerminacionActivity extends AppCompatActivity {
 
 
     public void descargarFormato(View sender) {
-        downloadQueueId = CentralDeConexiones.descargar(this, ""
-                , "Ejemplo de Carta de Terminación",
-                "Descargando el formato de la carta de terminación");
+        Toast.makeText(this, "Ups! aun no se habilita esta descarga!", Toast.LENGTH_SHORT).show();
+//        downloadQueueId = CentralDeConexiones.descargar(this, ""
+//                , "Ejemplo de Carta de Terminación",
+//                "Descargando el formato de la carta de terminación");
     }
 
     public void subirDocumento(View sender) {
 
+    }
+
+    @Override
+    public void actualizar() {
+        actualizarEstado();
     }
 }

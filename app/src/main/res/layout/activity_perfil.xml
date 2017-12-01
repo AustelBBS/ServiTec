@@ -174,7 +174,7 @@
         android:layout_height="43dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:onClick="cambiarContrasenia"
         android:text="Cambiar contraseña"
         android:textSize="10dp"
         app:layout_constraintHorizontal_bias="0.466"

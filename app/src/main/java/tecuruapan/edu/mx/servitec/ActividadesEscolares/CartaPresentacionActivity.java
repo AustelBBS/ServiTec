@@ -2,8 +2,8 @@ package tecuruapan.edu.mx.servitec.ActividadesEscolares;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +20,11 @@ import java.util.HashMap;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
 
 
-public class CartaPresentacionActivity extends AppCompatActivity {
+public class CartaPresentacionActivity extends AppCompatActivity implements InterfaceDeActualizacion {
     private long downloadID;
 
     TextView estadoTextView;
@@ -67,22 +69,28 @@ public class CartaPresentacionActivity extends AppCompatActivity {
         ambitoSpinner = (Spinner) findViewById(R.id.spinner_ambito);
         orgSpinner = (Spinner) findViewById(R.id.spinner_organismo);
 
-
-        ambitos.add("Federal");
-        ambitos.add("Municipal");
-        ambitos.add("Estatal");
-        ambitos.add("Privado");
+        ambitos.add("federal");
+        ambitos.add("municipal");
+        ambitos.add("estatal");
+        ambitos.add("privado");
         ambitoSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ambitos));
 
 
-        organismos.add("Público");
-        organismos.add("Privado");
-        organismos.add("Otro");
+        organismos.add("publico");
+        organismos.add("privado");
+        organismos.add("otro");
         orgSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, organismos));
 
         activarEntradas(false);
         ponerDatos();
         actualizarEstado();
+        DaemonDeActividades.registrarInterfaz(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
     }
 
     private void ponerDatos() {
@@ -100,7 +108,7 @@ public class CartaPresentacionActivity extends AppCompatActivity {
         downloadID = CentralDeConexiones.descargar(this,
                 CentralDeConexiones.miServicioSocial.linkEjemploCartaAceptacion(),
                 "Ejemplo carta de aceptación",
-                "Recuerda que sólo es un ejemplo.");
+                "Recuerda que sólo es un ejemplo.", ServicioSocial.ARCHIVO_CARTA_A);
     }
 
     public void botonDatos(View sender) {
@@ -115,6 +123,8 @@ public class CartaPresentacionActivity extends AppCompatActivity {
                 botonDatos.setText("Editar Datos");
                 botonDatos.setTag("editar");
                 activarEntradas(false);
+                if(validarEntradas())
+                    new subirDatosAsyncTask().execute();
                 break;
         }
 
@@ -135,6 +145,12 @@ public class CartaPresentacionActivity extends AppCompatActivity {
         orgSpinner.setEnabled(activados);
 
     }
+
+    @Override
+    public void actualizar() {
+        actualizarEstado();
+    }
+
     class BajarDatos extends AsyncTask<Void, Void, Void>{
         HashMap<String, String> datos;
         @Override
@@ -172,7 +188,68 @@ public class CartaPresentacionActivity extends AppCompatActivity {
 
     private boolean validarEntradas() {
         boolean datosOk = true;
+        if(nombreDependenciaEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Nombre de dependencia vacío.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(encargadoEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Encargado de dependencia vacío.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(puestoEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Puesto del encargado vacío.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(direccionEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Dirección vacía.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(telefonoEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Teléfono vacío.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(programaEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Nombre del programa vacío.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(subprogramaEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Subprograma vacío.", Toast.LENGTH_SHORT).show();
+            return false;
+        }if(fechaIniEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Fecha de inicio vacía.", Toast.LENGTH_SHORT).show();
+            return false;
+        }if(fechaFinEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Fecha de final vacía.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
 
         return datosOk;
+
+    }
+    class subirDatosAsyncTask extends AsyncTask<Void, Void, Void> {
+        boolean datosActualizados;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            datosActualizados = CentralDeConexiones.miServicioSocial.actualizarDatosDependencia(nombreDependenciaEditText.getText().toString(),
+                    ambitoSpinner.getSelectedItem().toString(),
+                    orgSpinner.getSelectedItem().toString(),
+                    encargadoEditText.getText().toString(),
+                    puestoEditText.getText().toString(),
+                    direccionEditText.getText().toString(),
+                    telefonoEditText.getText().toString(),
+                    programaEditText.getText().toString(),
+                    subprogramaEditText.getText().toString(),
+                    fechaIniEditText.getText().toString(),
+                    fechaFinEditText.getText().toString());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(CartaPresentacionActivity.this, CentralDeConexiones.miServicioSocial.ultimoMensaje(), Toast.LENGTH_LONG).show();
+            if(!datosActualizados) new BajarDatos ().execute();
+        }
     }
 }

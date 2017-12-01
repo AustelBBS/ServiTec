@@ -30,7 +30,7 @@ public class CentralDeConexiones {
     private CentralDeConexiones() {
     }
 
-    public static long descargar(Context context, String url, String titulo, String descripcion) {
+    public static long descargar(Context context, String url, String titulo, String descripcion, final String nombre) {
         Uri formatoUri = Uri.parse(url);
         long descargaId;
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
@@ -38,14 +38,14 @@ public class CentralDeConexiones {
 
         request.setTitle(titulo);
         request.setDescription(descripcion);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Informe_Bimestral.docx");
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, nombre);
 
         // intent receiver para que sque uatostada cuando termine  la descarga
         IntentFilter filter =  new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context, "Descarga terminada.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, nombre + " descargado", Toast.LENGTH_SHORT).show();
             }
         };
         context.registerReceiver(downloadReceiver, filter);

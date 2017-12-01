@@ -24,22 +24,28 @@ import org.jsoup.select.Elements;
  *
  */
 public class ServicioSocial {
-    // estados
-    public final static String APROBADO = "aprobado";
-    public final static String VACIO = "vacio";
-    public final static String ERROR = "error";
+
     final static String URL_RAIZ = "http://192.168.1.74/ssocial/";//la de mi casa
 //        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";// cuando uso el telefono como modem
     final static String URL_BASE = URL_RAIZ + "index.php?modulo=";
 //    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo="; // cuando uso el telefono?
     //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo="; // o es esta otra cuando uso el telefono?
+    // modulos
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";
     final static String MI_CUENTA = "miCuenta";
     final static String CARTA_PRESENTACION = "admin&avance=v_cartaPresentacion";
+    final static String MI_CLAVE = "miClave";
+    final static String REGISTRO = "registro";
 
     public final static String COOKIE_PHP = "PHPSESSID";
 
+    // estados
+    public final static String APROBADO = "aprobado";
+    public final static String VACIO = "vacio";
+    public final static String ERROR = "error";
+
+    //
     public final static String TERCER_A = "Tercer Avance";
     public final static String CURSO = "Asistencia en curso de Inducción";
     public final static String SOLICITUD_RE  = "Solicitud de Registro Servicio Social";
@@ -50,7 +56,7 @@ public class ServicioSocial {
     public final static String OFICIO_T = "Oficio de Terminación";
     public final static String PRIMER_A = "Primer avance";
 
-    private String mensaje; //guarda el mesaje de respuesta en algunos metodos
+    private static String mensaje = ""; //guarda el mesaje de respuesta en algunos metodos
     private String noControl;
     private String pass;
     private String cookie;
@@ -194,8 +200,58 @@ public class ServicioSocial {
 
         return actividades;
     }
-    
-    
+
+    public boolean actualizarDatosDependencia(String dependencia, String ambito, String tipo, String encargado, String puesto, String direccion, String telefono, String programa, String subprograma, String fechaIni, String fechaFin) {
+        boolean actualizadosConExito = false;
+        try {
+            String fechasIni[] = fechaIni.split("/");
+            String idia = String.valueOf(Integer.valueOf(fechasIni[0]));
+            String imes = String.valueOf(Integer.valueOf(fechasIni[1]));
+            String ianyo = String.valueOf(Integer.valueOf(fechasIni[2]));
+            String fechasFin[] = fechaFin.split("/");
+            String tdia = String.valueOf(Integer.valueOf(fechasFin[0]));
+            String tmes = String.valueOf(Integer.valueOf(fechasFin[1]));
+            String tanyo = String.valueOf(Integer.valueOf(fechasFin[2]));
+
+            Document respuesta = conectar(URL_BASE + CARTA_PRESENTACION)
+                    .data("dependencia", dependencia)
+                    .data("ambito", ambito)
+                    .data("organismo", tipo)
+                    .data("encargado", encargado)
+                    .data("puesto", puesto)
+                    .data("direccion", direccion)
+                    .data("telefono", telefono)
+                    .data("programa", programa)
+                    .data("subprograma", subprograma)
+                    .data("idia", idia)
+                    .data("imes", imes)
+                    .data("ianyo", ianyo)
+                    .data("tdia", tdia)
+                    .data("tmes", tmes)
+                    .data("tanyo", tanyo)
+                    .data("solicitar", "Guardar Datos")
+                    .post();
+            Element aviso = respuesta.getElementById("aviso");
+            Element error = respuesta.getElementById("color");
+            if(aviso != null){
+                actualizadosConExito = aviso.text().contains("actualizada correctamente");
+                mensaje = aviso.text();
+            }
+            if(error != null){
+                actualizadosConExito = false;
+                Elements otrosErrores = respuesta.getElementsByClass("rightTxt1");
+                mensaje = error.text();
+                mensaje = mensaje + "\n" + otrosErrores.text();
+//                System.err.println(respuesta.outerHtml());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
+            this.mensaje = "Se disparó una excepción: " + ex.getMessage();
+            return false;
+        }
+
+        return actualizadosConExito;
+    }
    
     /**
      * Devuelve todos los datos del estudiante registrado: nombre, dirección, teléfono, celular, correo, matrícula, idUnico, carrera, semestre, 
@@ -340,6 +396,7 @@ public class ServicioSocial {
     private String interpretarEstado(String estado) {
         estado = estado.substring(7,estado.length() - 4);
         if(estado.equals("acio")) return "vacio";
+//        if(estado.contains("probado")) return "aprobado"; NO por que hy uun estado llamado reprobado
         return estado;
     }
     
@@ -352,30 +409,38 @@ public class ServicioSocial {
         return Jsoup.connect(url).cookie(COOKIE_PHP, cookie);
     }
 
+    public final static String ARCHIVO_EV_RE = "Evaluacion_Receptora.docx";
     /**
      * Devuelve el link de descarga del formato para que se encargue de bajarlo el sistema.
      * @return
      */
     public String linkFormatoEvaluacionR() {
-        return URL_RAIZ + "documentos.php?cual=" + "Evaluacion_Receptora.docx";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_EV_RE;
     }
-
+    public final String ARCHIVO_SOLICITUD_RE = "Solicitud_De_Registro.docx";
     public String linkFormatoSolicitudRe () {
-        return URL_RAIZ + "documentos.php?cual=" + "Solicitud_De_Registro.docx";
+        return URL_RAIZ + "documentos.php?cual=" + SOLICITUD_RE;
     }
 
+    public final static String ARCHIVO_INFORME_BI = "Informe_Bimestral.docx";
     public String linkFormatoInformeBimestral () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Bimestral.docx
-        return URL_RAIZ + "documentos.php?cual=" + "Informe_Bimestral.docx";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_INFORME_BI;
     }
-
+    public final static String ARCHIVO_INFORME_G = "Informe_Global.docx";
     public String linkFormatoInformeGlobal () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Global.docx
-        return URL_RAIZ + "documentos.php?cual=" + "Informe_Global.docx";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_INFORME_G;
     }
+
+    public static final String ARCHIVO_CARTA_A = "encuestaservicio.pdf";
+    /**
+     * Este es el formato de descarga que ofrece la página dee la carta de presentacion
+     * @return el link
+     */
     public String linkEjemploCartaAceptacion() {
         //http://tecuruapan.edu.mx/ssocial/documentos.php?cual=encuestaservicio.pdf
-        return URL_RAIZ + "documentos.php?cual=" + "encuestaservicio.pdf";
+        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_CARTA_A;
     }
 
     public String linkSubirEvaluacion() {
@@ -388,9 +453,9 @@ public class ServicioSocial {
      * Devuelve el mensaje que haya sio almacenado y luego lo vacia.
      * @return Algún posible mensaje de respuesta.
      */
-    public String ultimoMensaje() {
+    public static String ultimoMensaje() {
         String salida = mensaje;
-        this.mensaje = "";
+        mensaje = "";
         return salida;
     }
 
@@ -434,6 +499,38 @@ public class ServicioSocial {
 
         return datos;
     }
+
+    public boolean cambiarPass(String passActual, String passNuevo, String passNuevoConfirmacion){
+        boolean passCambiado = false;
+        try {
+            //http://localhost/ssocial/index.php?modulo=miClave
+            Document respuesta = conectar(URL_BASE + MI_CLAVE)
+                    .data("actual", passActual)
+                    .data("nuevo", passNuevo)
+                    .data("repite", passNuevoConfirmacion)
+                    .data("guardar", "Guardar Cambios")
+                    .post();
+
+            Element aviso = respuesta.getElementById("aviso");
+            Element error = respuesta.getElementById("color");
+            if(aviso != null){
+                passCambiado = aviso.text().contains("actualizada correctamente");
+                mensaje = aviso.text();
+            }
+            if(error != null){
+                passCambiado = false;
+                mensaje = error.text();
+//                System.err.println(respuesta.outerHtml());
+            }
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
+            this.mensaje = "Se disparó una excepción: " + ex.getMessage();
+            return false;
+        }
+        return passCambiado;
+    }
     /**
      * Encuentra el valor seleccionado dentro del select (HTML).
      * @param select Elemento HTML sobre el cual se busca.
@@ -449,5 +546,32 @@ public class ServicioSocial {
         }
         return valorSeleccionado;
     }
+
+    public static String intentarRegistro(String noControl) {
+        String resultado = "";
+        try {
+            Document respuesta = Jsoup.connect(URL_BASE + REGISTRO)
+                    .data("noControl", noControl)
+                    .data("registro", "Enviar")
+                    .post();
+            Element aviso = respuesta.getElementsByClass("verde").first();
+            Element cuerpoAviso = respuesta.getElementsByClass("rightTxt1").first();
+            if(cuerpoAviso != null){
+                mensaje = cuerpoAviso.text();
+            }
+            if(aviso != null) {
+                return aviso.text();
+            }else {
+                aviso = respuesta.getElementsByClass("rojo").first();
+                if(aviso != null)
+                    return aviso.text();
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(ServicioSocial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "error";
+    }
+
 
 }

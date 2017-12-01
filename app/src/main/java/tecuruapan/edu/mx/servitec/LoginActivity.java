@@ -1,14 +1,19 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import lib.CentralDeConexiones;
@@ -20,12 +25,14 @@ public class LoginActivity extends AppCompatActivity {
     EditText contrasena;
     Button connect;
     ProgressBar progressBar;
+    TextView registrarseTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.action_bar);
+        registrarseTV = (TextView) findViewById(R.id.registrarse_tv);
         connect = (Button) findViewById(R.id.ConectarBtn);
         numControl = (EditText) findViewById(R.id.NumControl);
         contrasena = (EditText) findViewById(R.id.Contrasena);
@@ -43,11 +50,64 @@ public class LoginActivity extends AppCompatActivity {
         });
         setSupportActionBar(toolbar);
 
+        registrarseTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mostrarDialogo();
+            }
+        });
+
     }
 
     public void conectar(String user, String pass) {
         CentralDeConexiones.miServicioSocial = new ServicioSocial(user, pass);
         new LoginTask ().execute();
+    }
+
+    private void mostrarDialogo() {
+        final EditText noControl = new EditText(this);
+        noControl.setHint("Número de control");
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.setMargins(15,15,15,0);
+        noControl.setLayoutParams(lp);
+
+        AlertDialog dialogo = new AlertDialog.Builder(this)
+                .setTitle("Registro")
+                .setPositiveButton("Registrar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new IntentoRegistroAsyncTask ().execute(noControl.getText().toString());
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .setCancelable(false)
+                .setView(noControl)
+                .create();
+        dialogo.show();
+    }
+
+    class IntentoRegistroAsyncTask extends AsyncTask<String, Void, Void>{
+        String tituloRespuesta = "";
+        String respuesta = "";
+        @Override
+        protected Void doInBackground(String... strings) {
+            tituloRespuesta = ServicioSocial.intentarRegistro(strings[0]);
+            respuesta = ServicioSocial.ultimoMensaje();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle(tituloRespuesta)
+                    .setMessage(respuesta)
+                    .setPositiveButton("Regresar", null)
+                    .create()
+                    .show();
+        }
     }
 
     class LoginTask extends AsyncTask<Void, Void, Void>{
@@ -79,60 +139,5 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    Depecrated, have direct access to db
-    public class HTTPHandler extends AsyncTask<String, Void, Void> {
-        String user, pass;
-
-        public HTTPHandler(String user, String pass) {
-            this.user = user;
-            this.pass = pass;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            DefaultHttpClient httpclient = new DefaultHttpClient();
-            String url = params[0];
-            HttpPost httpost = new HttpPost(url);
-
-            try {
-                List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-                nvps.add(new BasicNameValuePair("noControl", user));
-                nvps.add(new BasicNameValuePair("clave", pass));
-                httpost.setEntity(new UrlEncodedFormEntity(nvps));
-
-            } catch (UnsupportedEncodingException e) {
-                // writing error to Log
-                e.printStackTrace();
-            }
-            try {
-                HttpResponse response = httpclient.execute(httpost);
-
-                // writing response to log
-                Log.d("Http Response:", response.getStatusLine().toString());
-
-                llamar(response.toString());
-            } catch (ClientProtocolException e) {
-                // writing exception to log
-                e.printStackTrace();
-
-            } catch (IOException e) {
-                // writing exception to log
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        public void llamar(final String response) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-    }*/
 
 }

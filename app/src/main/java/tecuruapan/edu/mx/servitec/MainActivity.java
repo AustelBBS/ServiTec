@@ -12,11 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import lib.CentralDeConexiones;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.InterfaceDeActualizacion;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements InterfaceDeActualizacion {
     ProgressBar barra;
     TextView etiquetaP;
     Button actividades, resumen, perfil, cerrar;
+    static Intent intentService = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,28 +57,17 @@ public class MainActivity extends AppCompatActivity {
                 new CerrarAsync().execute();
             }
         });
-        AsyncTask<Void, Void, Void> networkTask = new AsyncTask<Void, Void, Void>() {
-            int progreso;
-            @Override
-            protected Void doInBackground(Void... voids) {
-                progreso = CentralDeConexiones.miServicioSocial.progresoDeLiberacion();
-                return null;
-            }
+        new ProgresoAsync ().execute();
+        intentService = new Intent(this, DaemonDeActividades.class);
+        startService(intentService);
+        DaemonDeActividades.registrarInterfaz(this);
+//        actualizar();
+    }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        barra.setProgress(progreso);
-                        etiquetaP.setText("Progreso General: " + progreso + "%");
-                    }
-                });
-            }
-        };
-        networkTask.execute();
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
     }
 
     private void cambiar(String activity) {
@@ -99,6 +91,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void actualizar() {
+        new ProgresoAsync ().execute();
+
+    }
+
+    class ProgresoAsync extends  AsyncTask<Void, Void, Void>{
+
+            int progreso;
+            @Override
+            protected Void doInBackground(Void... voids) {
+                progreso = CentralDeConexiones.miServicioSocial.progresoDeLiberacion();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                barra.setProgress(progreso);
+                etiquetaP.setText("Progreso General: " + progreso + "%");
+                super.onPostExecute(aVoid);
+            }
+
+
+    }
     class CerrarAsync extends AsyncTask<Void, Void, Void>{
         String error = "";
         @Override

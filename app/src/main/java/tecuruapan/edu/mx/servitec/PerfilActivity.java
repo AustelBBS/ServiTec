@@ -1,14 +1,20 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,8 +94,68 @@ public class PerfilActivity extends AppCompatActivity {
         Toast.makeText(this, "Ups! Esto aún no funciona.", Toast.LENGTH_SHORT).show();
     }
 
+    ProgressBar progressBar;
+    EditText passActual, passNuevo, passConfirmacion;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void cambiarContrasenia(View sender) {
-        Toast.makeText(this, "Ups!  Esto aún no funciona.", Toast.LENGTH_SHORT).show();
+        // istas que forman el dialogo
+        View vista = getLayoutInflater().inflate(R.layout.cambio_pass_dialog_layout, null);
+        progressBar  = (ProgressBar) vista.findViewById(R.id.progressBarCambioPass);
+        passActual = (EditText) vista.findViewById(R.id.passactualEditText);
+        passNuevo = (EditText) vista.findViewById(R.id.passNuevoEditText);
+        passConfirmacion = (EditText) vista.findViewById(R.id.passCofirmacionEditText);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        // mostrando dialogo
+        final AlertDialog dialogo = new AlertDialog.Builder(this)
+                .setTitle("Cambio de contraseña")
+                .setPositiveButton("Cambiar", null)
+                .setNegativeButton("Cancelar", null)
+                .setView(vista)
+                .setCancelable(false)
+                .create();
+        dialogo.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                final Button botonOk = dialogo.getButton(AlertDialog.BUTTON_POSITIVE);
+                final Button botonCancelar = dialogo.getButton(AlertDialog.BUTTON_NEGATIVE);
+                botonOk.setOnClickListener(new View.OnClickListener() {
+                    class CambiarPassAsyncTask extends AsyncTask<Void, Void, Void> {
+
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                            progressBar.setVisibility(View.VISIBLE);
+                            botonOk.setEnabled(false);
+                            botonCancelar.setEnabled(false);
+                            passActual.setEnabled(false);
+                            passNuevo.setEnabled(false);
+                            passConfirmacion.setEnabled(false);
+                        }
+
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            CentralDeConexiones.miServicioSocial.cambiarPass(passActual.getText().toString(), passNuevo.getText().toString(), passConfirmacion.getText().toString());
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            Toast.makeText(PerfilActivity.this, CentralDeConexiones.miServicioSocial.ultimoMensaje(), Toast.LENGTH_SHORT).show();
+                            dialogo.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onClick(View view) {
+                        new CambiarPassAsyncTask().execute();
+                    }
+                });
+            }
+        });
+
+        dialogo.show();
     }
 
     private boolean validarDatos() {
@@ -181,5 +247,7 @@ public class PerfilActivity extends AppCompatActivity {
              Toast.makeText(PerfilActivity.this, resultado, Toast.LENGTH_SHORT).show();
          }
      }
+
+
 
 }

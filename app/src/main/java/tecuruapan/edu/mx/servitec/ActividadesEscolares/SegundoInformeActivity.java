@@ -18,9 +18,10 @@ import android.widget.Toast;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
 
-public class SegundoInformeActivity extends AppCompatActivity {
+public class SegundoInformeActivity extends AppCompatActivity implements InterfaceDeActualizacion{
     final static int codigo = 44;
 
     TextView estadoTextView;
@@ -35,8 +36,15 @@ public class SegundoInformeActivity extends AppCompatActivity {
         estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         estadoTextView = (TextView) findViewById(R.id.textView_estado_sa);
         actualizarEstado();
-
+        DaemonDeActividades.registrarInterfaz(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
+    }
+
     public void actualizarEstado() {
         SharedPreferences preferences = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
         String estado = preferences.getString(ServicioSocial.PRIMER_A, "error");
@@ -73,4 +81,8 @@ public class SegundoInformeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void actualizar() {
+        actualizarEstado();
+    }
 }

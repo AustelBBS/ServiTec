@@ -21,13 +21,14 @@ import tecuruapan.edu.mx.servitec.ActividadesEscolares.CartaEvaluacionActivity;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.CartaPresentacionActivity;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.CursoInduccionActivity;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.InformeGlobalActivity;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.InterfaceDeActualizacion;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.OficioTerminacionActivity;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.PrimerInformeActivity;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.SegundoInformeActivity;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.SolicitudRegistroActivity;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.TercerInformeActivity;
 
-public class ActividadesActivity extends AppCompatActivity implements  View.OnClickListener{
+public class ActividadesActivity extends AppCompatActivity implements  View.OnClickListener, InterfaceDeActualizacion{
     ImageView imagenCurso,
             imagenPresentacion,
             imagenRegistro,
@@ -38,7 +39,6 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
             imagenTerminacion,
             imagenEvaluacion;
     HashMap<String, String> actividades;
-    static Intent intentService = null;
     TextView curso,
             cartaPre,
             solicitudRe,
@@ -97,8 +97,14 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
         cartaEva.setOnClickListener(this);
 
         actualizarEstados();
+        DaemonDeActividades.registrarInterfaz(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.registrarInterfaz(this);
+    }
 
     public static int imagenId (String tipo) {
         switch (tipo) {
@@ -209,6 +215,11 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
         }
     }
 
+    @Override
+    public void actualizar() {
+        actualizarEstados();
+    }
+
     class NetworkTask extends AsyncTask<Void, Void, HashMap<String, String>>{
 
         @Override
@@ -222,9 +233,6 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
             super.onPostExecute(resultados);
             ponerImagenes(resultados);
             guardarEstados();
-            intentService = new Intent(ActividadesActivity.this, ServicioDeActividades.class);
-            startService(intentService);
-
         }
     }
 

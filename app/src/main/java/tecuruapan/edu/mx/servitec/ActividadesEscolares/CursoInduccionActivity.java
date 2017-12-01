@@ -9,8 +9,9 @@ import android.widget.TextView;
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
 import tecuruapan.edu.mx.servitec.ActividadesActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.R;
-public class CursoInduccionActivity extends AppCompatActivity {
+public class CursoInduccionActivity extends AppCompatActivity implements InterfaceDeActualizacion {
     TextView estadoTextView;
     ImageView estadoImageView;
     @Override
@@ -20,6 +21,13 @@ public class CursoInduccionActivity extends AppCompatActivity {
         estadoImageView = (ImageView) findViewById(R.id.imagen_estado_sr);
         estadoTextView = (TextView) findViewById(R.id.textview_curso_estado);
         actualizarDatos();
+        DaemonDeActividades.registrarInterfaz(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DaemonDeActividades.removerInterfaz(this);
     }
 
     private void actualizarDatos() {
@@ -29,4 +37,8 @@ public class CursoInduccionActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void actualizar() {
+        actualizarDatos();
+    }
 }
