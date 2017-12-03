@@ -1,5 +1,6 @@
 package tecuruapan.edu.mx.servitec.ActividadesEscolares;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -52,6 +53,7 @@ public class SegundoInformeActivity extends AppCompatActivity implements Interfa
         estadoImageView.setImageResource(ActividadesActivity.imagenId(estado));
     }
 
+    // TODO: utilizar la version de descarga disponible en CentralDeConexiones
     public void descargarFormato(View sender) {
         Uri formatoUri = Uri.parse(CentralDeConexiones.miServicioSocial.linkFormatoInformeBimestral());
         long descargaId;
@@ -78,7 +80,20 @@ public class SegundoInformeActivity extends AppCompatActivity implements Interfa
     }
 
     public void subirDocumento(View sender) {
+        // seleccionar archivo
+        CentralDeConexiones.SubirArchivoAsync.seleccionarArchivo(this);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK && requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE){
+            new CentralDeConexiones.SubirArchivoAsync(this,
+                    "Subiendo Segundo Informe",
+                    data.getData(),
+                    ServicioSocial.LINK_SUBIR_AVANCE_2)
+                    .execute();
+        }
     }
 
     @Override

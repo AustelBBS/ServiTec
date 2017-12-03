@@ -1,5 +1,7 @@
 package tecuruapan.edu.mx.servitec.ActividadesEscolares;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,7 +51,18 @@ public class TercerInformeActivity extends AppCompatActivity implements Interfac
     }
 
     public void subirDocumento(View sender) {
+        // seleccionar archivo
+        CentralDeConexiones.SubirArchivoAsync.seleccionarArchivo(this);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Tercer Informe",
+                    data.getData(), ServicioSocial.LINK_SUBIR_AVANCE_3)
+                    .execute();
+        }
     }
 
     @Override

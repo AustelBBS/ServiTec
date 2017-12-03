@@ -1,8 +1,10 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 import lib.CentralDeConexiones;
+import lib.ServicioSocial;
 
 public class PerfilActivity extends AppCompatActivity {
     TextView textViewMatricula,
@@ -91,7 +94,22 @@ public class PerfilActivity extends AppCompatActivity {
 
     }
     public void cambiarFoto(View sender) {
-        Toast.makeText(this, "Ups! Esto aún no funciona.", Toast.LENGTH_SHORT).show();
+        // seleccionar foto
+        Intent intent = new Intent();
+        intent.setType("image/jpeg");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"),999);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK && requestCode == 999) {
+            new CentralDeConexiones.SubirArchivoAsync(this,
+                    "Subiendo foto de perfil",
+                    data.getData(),
+                    ServicioSocial.LINK_SUBI_FOTO).execute();
+        }
     }
 
     ProgressBar progressBar;

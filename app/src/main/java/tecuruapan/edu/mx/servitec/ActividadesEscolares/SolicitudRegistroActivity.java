@@ -1,5 +1,6 @@
 package tecuruapan.edu.mx.servitec.ActividadesEscolares;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -49,6 +50,7 @@ public class SolicitudRegistroActivity extends AppCompatActivity implements Inte
         estadoImageView.setImageResource(ActividadesActivity.imagenId(estado));
     }
 
+    // TODO: seguro que tengo una version en CentralDeConexiones para bajar formatos?
     public void bajarFormato(View sender){
         Uri formatoUri = Uri.parse(CentralDeConexiones.miServicioSocial.linkFormatoSolicitudRe());
         long descargaId;
@@ -74,7 +76,20 @@ public class SolicitudRegistroActivity extends AppCompatActivity implements Inte
     }
 
     public void subirSolicitud(View sender) {
+        // seleccionar archivo
+        CentralDeConexiones.SubirArchivoAsync.seleccionarArchivo(this);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            new CentralDeConexiones.SubirArchivoAsync(this,
+                    "Subiendo Solicitud de Registro",
+                    data.getData(),
+                    ServicioSocial.LINK_SUBIR_SOLICITUD_REGISTRO)
+                    .execute();
+        }
     }
 
     @Override
