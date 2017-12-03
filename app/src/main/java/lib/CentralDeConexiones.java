@@ -223,4 +223,137 @@ public class CentralDeConexiones {
             }
         }
     }
+
+    public static class SubirFotoAsync extends AsyncTask<Void, Void, Void>{
+
+        public final static  int REQUEST_CODE = 999;
+        int serverResponseCode;
+        Context context;
+        ProgressDialog dialog;
+        String titulo;
+        Uri uri;
+        String direccion;
+        String paginaRespuesta;
+        String fileName;
+
+        public SubirFotoAsync(Context c, String titulo, Uri uri, String direccion) {
+            this.context = c;
+            this.titulo = titulo;
+            this.uri = uri;
+            this.direccion = direccion;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            fileName = SubirArchivoAsync.buscarNombre(uri, context);
+            dialog = ProgressDialog.show(context, titulo, fileName, true);
+            dialog.setCancelable(false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            HttpURLConnection conn;
+            DataOutputStream dos;
+            String lineEnd = "\r\n";
+            String twoHyphens = "--";
+            String boundary = "*****";
+            int bytesRead, bytesAvailable, bufferSize;
+            byte[] buffer;
+            int maxBufferSize = 1024 * 1024;
+
+            try {
+
+                // open a URL connection to the Servlet
+                InputStream fileInputStream = context.getContentResolver().openInputStream(uri);
+                URL url = new URL(direccion);
+
+                // Open a HTTP  connection to  the URL
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setInstanceFollowRedirects(false);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8\n");
+                conn.setRequestProperty("Accept-Encoding" ,"gzip, deflate, br");
+                conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9,es;q=0.8");
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Cache-Control","max-age=0");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                // content lenght? meh
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                conn.setRequestProperty("Cookie", miServicioSocial.COOKIE_PHP + "=" + miServicioSocial.getCookie());
+
+                conn.setRequestProperty("DNT","1");
+                conn.setRequestProperty("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36");
+
+                dos = new DataOutputStream(conn.getOutputStream());
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"archivo\";filename=\"" + fileName + "\"" + lineEnd);
+                dos.writeBytes("Content-Type: image/jpeg" + lineEnd);
+                dos.writeBytes(lineEnd);
+
+                // create a buffer of  maximum size
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
+
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                while (bytesRead > 0) {
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                }
+
+                // send multipart form data necesssary after file data...
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                // Responses from the server (code and message)
+                serverResponseCode = conn.getResponseCode();
+                String serverResponseMessage = conn.getResponseMessage();
+
+                Log.i("uploadFile", "HTTP Response is : "
+                        + serverResponseMessage + ": " + serverResponseCode);
+
+                StringBuilder respuesta = new StringBuilder();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                for (String line; (line = reader.readLine()) != null;) {
+//                        Log.d("MAR",line);
+                    respuesta.append(line);
+                }
+                paginaRespuesta = respuesta.toString();
+
+                //close the streams //
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+                Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("tag", "Exception : " + e.getMessage(), e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void s) {
+            super.onPostExecute(s);
+            dialog.dismiss();
+            if(serverResponseCode == 200 && paginaRespuesta.contains("REMPLAZADO CORRECTAMENTE")){
+                Toast.makeText(context, "Reemplazado correctamente", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(context, "Error, no se pudo subir el archivo", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

@@ -105,7 +105,7 @@ public class PerfilActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK && requestCode == 999) {
-            new CentralDeConexiones.SubirArchivoAsync(this,
+            new CentralDeConexiones.SubirFotoAsync(this,
                     "Subiendo foto de perfil",
                     data.getData(),
                     ServicioSocial.LINK_SUBI_FOTO).execute();

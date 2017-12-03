@@ -163,10 +163,10 @@ public class ServicioSocial {
     }
     
     public Bitmap descargarImagen() {
-//        String URL = "http://localhost/ssocial/usuarios/" + noControl + "/avatar.jpg";
-        String URL = "http://tecuruapan.edu.mx/ssocial/usuarios/" + noControl  + "/avatar.jpg";
+        String URL = HOST + "ssocial/usuarios/" + noControl  + "/avatar.jpg";
         try {
             Connection.Response respuesta = Jsoup.connect(URL)
+
                     .ignoreContentType(true).
                     execute();
             Bitmap img = BitmapFactory.decodeByteArray(respuesta.bodyAsBytes(),0,respuesta.bodyAsBytes().length);
