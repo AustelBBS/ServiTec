@@ -155,8 +155,6 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
                 estadosEditor.putString(actividad, estado);
             }
         });
-
-
         estadosEditor.commit();
     }
 

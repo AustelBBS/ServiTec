@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,8 +26,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Set;
 
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.InterfaceDeActualizacion;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.TercerInformeActivity;
+import tecuruapan.edu.mx.servitec.DaemonDeActividades;
 import tecuruapan.edu.mx.servitec.LoginActivity;
 
 /**
@@ -235,12 +240,14 @@ public class CentralDeConexiones {
         String direccion;
         String paginaRespuesta;
         String fileName;
+        InterfaceDeActualizacion alTerminar;
 
-        public SubirFotoAsync(Context c, String titulo, Uri uri, String direccion) {
+        public SubirFotoAsync(Context c, String titulo, Uri uri, String direccion, InterfaceDeActualizacion alTerminar) {
             this.context = c;
             this.titulo = titulo;
             this.uri = uri;
             this.direccion = direccion;
+            this.alTerminar = alTerminar;
         }
 
 
@@ -351,9 +358,54 @@ public class CentralDeConexiones {
             dialog.dismiss();
             if(serverResponseCode == 200 && paginaRespuesta.contains("REMPLAZADO CORRECTAMENTE")){
                 Toast.makeText(context, "Reemplazado correctamente", Toast.LENGTH_SHORT).show();
+                alTerminar.actualizar();
             }else{
                 Toast.makeText(context, "Error, no se pudo subir el archivo", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    class tareaNetwork extends AsyncTask<Void, Void, Void> {
+        HashMap<String, String> actividadeNuevas;
+        Context context;
+
+        public tareaNetwork (Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            actividadeNuevas = miServicioSocial.recuperarActividades();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Log.d("CentralDeConexiones", "Buscando cambios");
+            SharedPreferences actividadesViejas = context.getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
+            Set<String> llaves = actividadeNuevas.keySet();
+            for(String llave: llaves){
+                String valorViejo = actividadesViejas.getString(llave, "Error");
+                String valorNuevo = actividadeNuevas.get(llave);
+
+                if(!valorViejo.equals(valorNuevo)) {
+                    guardar(llave, valorNuevo);
+//                    for(InterfaceDeActualizacion inter: actividadesPorActualizar) {
+//                        inter.actualizar();
+//                    }
+
+                }else {
+//                    Log.d(TAG, "No se cambio nada");
+                }
+
+            }
+        }
+
+        void guardar(String actividad, String valor) {
+            SharedPreferences.Editor editor = context.getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0).edit();
+            editor.putString(actividad,valor);
+            editor.commit();
         }
     }
 }

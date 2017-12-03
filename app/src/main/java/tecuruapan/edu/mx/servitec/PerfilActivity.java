@@ -24,8 +24,9 @@ import java.util.HashMap;
 
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.InterfaceDeActualizacion;
 
-public class PerfilActivity extends AppCompatActivity {
+public class PerfilActivity extends AppCompatActivity implements InterfaceDeActualizacion{
     TextView textViewMatricula,
             textViewSemestre,
             textViewCarrera,
@@ -108,7 +109,7 @@ public class PerfilActivity extends AppCompatActivity {
             new CentralDeConexiones.SubirFotoAsync(this,
                     "Subiendo foto de perfil",
                     data.getData(),
-                    ServicioSocial.LINK_SUBI_FOTO).execute();
+                    ServicioSocial.LINK_SUBI_FOTO, this).execute();
         }
     }
 
@@ -199,6 +200,11 @@ public class PerfilActivity extends AppCompatActivity {
             return false;
         }
         return datosOk;
+    }
+
+    @Override
+    public void actualizar() {
+        new bajarImagenAsyncTask().execute();
     }
 
     class bajarImagenAsyncTask extends  AsyncTask<Void, Void, Void> {

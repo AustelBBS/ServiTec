@@ -100,7 +100,6 @@ import static lib.CentralDeConexiones.miServicioSocial;
                     for(InterfaceDeActualizacion inter: actividadesPorActualizar) {
                         inter.actualizar();
                     }
-//                    Toast.makeText(DaemonDeActividades.this, "Hubo un cambio en tus documentos" , Toast.LENGTH_SHORT).show();
                     notificacion.enviarNotificacion(DaemonDeActividades.this, llave + " ha pasado a: " + valorNuevo);
                     Log.d(TAG,"llave:'" + llave + "'");
                     Log.d(TAG, "valorNuevo en hashmap:'" + valorNuevo + "'");
