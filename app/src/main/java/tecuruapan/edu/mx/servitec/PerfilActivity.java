@@ -1,7 +1,9 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,8 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 import lib.CentralDeConexiones;
+import lib.ServicioSocial;
+import tecuruapan.edu.mx.servitec.ActividadesEscolares.InterfaceDeActualizacion;
 
-public class PerfilActivity extends AppCompatActivity {
+public class PerfilActivity extends AppCompatActivity implements InterfaceDeActualizacion{
     TextView textViewMatricula,
             textViewSemestre,
             textViewCarrera,
@@ -99,7 +103,22 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     public void cambiarFoto(View sender) {
-        Toast.makeText(this, "Ups! Esto aún no funciona.", Toast.LENGTH_SHORT).show();
+        // seleccionar foto
+        Intent intent = new Intent();
+        intent.setType("image/jpeg");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"),999);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK && requestCode == 999) {
+            new CentralDeConexiones.SubirFotoAsync(this,
+                    "Subiendo foto de perfil",
+                    data.getData(),
+                    ServicioSocial.LINK_SUBI_FOTO, this).execute();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -187,6 +206,11 @@ public class PerfilActivity extends AppCompatActivity {
             return false;
         }
         return datosOk;
+    }
+
+    @Override
+    public void actualizar() {
+        new bajarImagenAsyncTask().execute();
     }
 
     class bajarImagenAsyncTask extends  AsyncTask<Void, Void, Void> {

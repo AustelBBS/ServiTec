@@ -1,5 +1,7 @@
 package tecuruapan.edu.mx.servitec.ActividadesEscolares;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,9 +51,18 @@ public class InformeGlobalActivity extends AppCompatActivity implements Interfac
     }
 
     public void subirDocumento(View sender) {
-
+        // seleccionar documento
+        CentralDeConexiones.SubirArchivoAsync.seleccionarArchivo(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK && requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE){
+            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Informe Global", data.getData(), ServicioSocial.LINK_SUBIR_INFORME_G)
+                    .execute();
+        }
+    }
 
     @Override
     public void actualizar() {

@@ -25,11 +25,11 @@ import org.jsoup.select.Elements;
  */
 public class ServicioSocial {
 
-    final static String URL_RAIZ = "http://192.168.1.74/ssocial/";//la de mi casa
+    final static String HOST = "http://192.168.1.74/";//la de mi casa
+//    final static String HOST = "http://192.168.43.143/";//la de mi telefono
 //        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";// cuando uso el telefono como modem
-    final static String URL_BASE = URL_RAIZ + "index.php?modulo=";
-//    final static String URL_BASE = "http://192.168.43.143/ssocial/index.php?modulo="; // cuando uso el telefono?
-    //    final static String URL_BASE = "http://192.168.42.190/index.php?modulo="; // o es esta otra cuando uso el telefono?
+    final static String URL_BASE = HOST + "ssocial/index.php?modulo=";
+
     // modulos
     final static String LOGUEO = "logeo";
     final static String SALIR = "salir";
@@ -37,6 +37,21 @@ public class ServicioSocial {
     final static String CARTA_PRESENTACION = "admin&avance=v_cartaPresentacion";
     final static String MI_CLAVE = "miClave";
     final static String REGISTRO = "registro";
+
+    // links de subida
+    //http://localhost/ssocial/index.php?modulo=admin&avance=v_solicitudServicio
+    public final static String LINK_SUBIR_SOLICITUD_REGISTRO = URL_BASE+ "admin&avance=v_solicitudServicio&subir=subir_archivo";
+
+    public final static String LINK_SUBIR_OFICIO_T = URL_BASE+ "admin&avance=v_oficioTerminacion&subir=subir_archivo";
+    public final static String LINK_SUBIR_INFORME_G = URL_BASE+ "admin&avance=v_InformeGlobal&subir=subir_archivo";
+
+    public final static String LINK_SUBIR_CARTA_EVALUACION_RECEP= URL_BASE + "admin&avance=v_evaluacionReceptora&subir=subir_archivo";
+
+    public final static String LINK_SUBIR_AVANCE_1 = URL_BASE+ "admin&avance=v_primerAvance&subir=subir_archivo";
+    public final static String LINK_SUBIR_AVANCE_2 = URL_BASE+ "admin&avance=v_segundoAvance&subir=subir_archivo";
+    public final static String LINK_SUBIR_AVANCE_3 = URL_BASE+ "admin&avance=v_tercerAvance&subir=subir_archivo";
+
+    public final  static  String LINK_SUBI_FOTO = URL_BASE + "miFoto&subir=subir_archivo";
 
     public final static String COOKIE_PHP = "PHPSESSID";
 
@@ -148,10 +163,10 @@ public class ServicioSocial {
     }
     
     public Bitmap descargarImagen() {
-//        String URL = "http://localhost/ssocial/usuarios/" + noControl + "/avatar.jpg";
-        String URL = "http://tecuruapan.edu.mx/ssocial/usuarios/" + noControl  + "/avatar.jpg";
+        String URL = HOST + "ssocial/usuarios/" + noControl  + "/avatar.jpg";
         try {
             Connection.Response respuesta = Jsoup.connect(URL)
+
                     .ignoreContentType(true).
                     execute();
             Bitmap img = BitmapFactory.decodeByteArray(respuesta.bodyAsBytes(),0,respuesta.bodyAsBytes().length);
@@ -415,22 +430,22 @@ public class ServicioSocial {
      * @return
      */
     public String linkFormatoEvaluacionR() {
-        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_EV_RE;
+        return HOST+ "ssocial/" + "documentos.php?cual=" + ARCHIVO_EV_RE;
     }
     public final String ARCHIVO_SOLICITUD_RE = "Solicitud_De_Registro.docx";
     public String linkFormatoSolicitudRe () {
-        return URL_RAIZ + "documentos.php?cual=" + SOLICITUD_RE;
+        return HOST+ "ssocial/"  + "documentos.php?cual=" + SOLICITUD_RE;
     }
 
     public final static String ARCHIVO_INFORME_BI = "Informe_Bimestral.docx";
     public String linkFormatoInformeBimestral () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Bimestral.docx
-        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_INFORME_BI;
+        return HOST+ "ssocial/"  + "documentos.php?cual=" + ARCHIVO_INFORME_BI;
     }
     public final static String ARCHIVO_INFORME_G = "Informe_Global.docx";
     public String linkFormatoInformeGlobal () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Global.docx
-        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_INFORME_G;
+        return HOST+ "ssocial/"  + "documentos.php?cual=" + ARCHIVO_INFORME_G;
     }
 
     public static final String ARCHIVO_CARTA_A = "encuestaservicio.pdf";
@@ -440,10 +455,11 @@ public class ServicioSocial {
      */
     public String linkEjemploCartaAceptacion() {
         //http://tecuruapan.edu.mx/ssocial/documentos.php?cual=encuestaservicio.pdf
-        return URL_RAIZ + "documentos.php?cual=" + ARCHIVO_CARTA_A;
+        return HOST+ "ssocial/"  + "documentos.php?cual=" + ARCHIVO_CARTA_A;
     }
 
     public String linkSubirEvaluacion() {
+        //http://localhost/ssocial/index.php?modulo=admin&avance=v_evaluacionReceptora#subir
         return URL_BASE + "admin&avance=v_evaluacionReceptora";
     }
      public String getCookie() {
