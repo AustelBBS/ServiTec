@@ -1,6 +1,5 @@
 package tecuruapan.edu.mx.servitec;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,14 +10,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+
 import lib.CentralDeConexiones;
 import tecuruapan.edu.mx.servitec.ActividadesEscolares.InterfaceDeActualizacion;
 
 public class MainActivity extends AppCompatActivity implements InterfaceDeActualizacion {
-    ProgressBar barra;
-    TextView etiquetaP;
-    Button actividades, resumen, perfil, cerrar;
     static Intent intentService = null;
+    ProgressBar barra;
+    TextView etiquetaP, fecha;
+    Button actividades, resumen, perfil, cerrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceDeActual
         cerrar = (Button) findViewById(R.id.cerrar);
         barra = (ProgressBar) findViewById(R.id.progress);
         etiquetaP = (TextView) findViewById(R.id.etiqueta_progreso);
-
+        fecha = (TextView) findViewById(R.id.tvFecha);
         actividades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +62,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceDeActual
         intentService = new Intent(this, DaemonDeActividades.class);
         startService(intentService);
         DaemonDeActividades.registrarInterfaz(this);
-//        actualizar();
+        long date = System.currentTimeMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
+        String fechaCadena = sdf.format(date);
+        fecha.setText(fechaCadena);
     }
 
     @Override

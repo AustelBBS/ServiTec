@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
@@ -47,7 +48,23 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
             tercerA,
             oficioT,
             informeG,
-            cartaEva;
+            cartaEva,
+            fecha;
+
+    public static int imagenId(String tipo) {
+        switch (tipo) {
+            case ServicioSocial.APROBADO:
+                return R.drawable.ic_aceptado;
+            case ServicioSocial.ERROR:
+                return R.drawable.ic_rechazado;
+            case ServicioSocial.VACIO:
+                return R.drawable.ic_defecto;
+            default:
+                Log.e("ActividadesActivity", "Error, caso no esperado al obtener tipo de imagen.");
+                Log.e("ActividadesActivity", tipo);
+                return R.drawable.ic_revisado;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +92,7 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
         oficioT = (TextView) findViewById(R.id.oficio_T);
         informeG = (TextView) findViewById(R.id.informe_G);
         cartaEva = (TextView) findViewById(R.id.carta_eva);
+        fecha = (TextView) findViewById(R.id.tvFecha);
 
         curso.setTag("curso");
         cartaPre.setTag("cartaP");
@@ -98,27 +116,18 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
 
         actualizarEstados();
         DaemonDeActividades.registrarInterfaz(this);
+
+        long date = System.currentTimeMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
+        String fechaCadena = sdf.format(date);
+        fecha.setText(fechaCadena);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         DaemonDeActividades.registrarInterfaz(this);
-    }
-
-    public static int imagenId (String tipo) {
-        switch (tipo) {
-            case ServicioSocial.APROBADO:
-                return R.drawable.ic_aceptado;
-            case ServicioSocial.ERROR:
-                return R.drawable.ic_rechazado;
-            case ServicioSocial.VACIO:
-                return R.drawable.ic_defecto;
-            default:
-                Log.e("ActividadesActivity", "Error, caso no esperado al obtener tipo de imagen.");
-                Log.e("ActividadesActivity", tipo);
-                return R.drawable.ic_revisado;
-        }
     }
 
     // compara los estados de las actividades guardadas en persistentement
