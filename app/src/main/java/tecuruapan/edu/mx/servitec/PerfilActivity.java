@@ -63,15 +63,16 @@ public class PerfilActivity extends AppCompatActivity implements InterfaceDeActu
         botonCambiarContrasenia = (Button) findViewById(R.id.button_contrasenia);
         botonEditar = (Button) findViewById(R.id.button_editar);
         botonCambiarImagen = (Button) findViewById(R.id.boton_perfil);
-        fecha = (TextView) findViewById(R.id.tvFecha);
+        // no hay ningun widget en el xml de perfil que tenga tvFecha
+//        fecha = (TextView) findViewById(R.id.tvFecha);
 
         new bajarDatos().execute();
         new bajarImagenAsyncTask().execute();
         long date = System.currentTimeMillis();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
-        String fechaCadena = sdf.format(date);
-        fecha.setText(fechaCadena);
+//        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
+//        String fechaCadena = sdf.format(date);
+//        fecha.setText(fechaCadena);
     }
 
     public void editarDatos(View sender){

@@ -25,10 +25,12 @@ import org.jsoup.select.Elements;
  */
 public class ServicioSocial {
 
-    final static String HOST = "http://192.168.1.74/";//la de mi casa
-//    final static String HOST = "http://192.168.43.143/";//la de mi telefono
-//        final static String URL_RAIZ = "http://192.168.43.143/ssocial/";// cuando uso el telefono como modem
-    final static String URL_BASE = HOST + "ssocial/index.php?modulo=";
+    //final static  String HOST = "https://oc048f0os.000webhostapp.com/";
+        final static String HOST = "http://192.168.1.74/ssocial/";//la de mi casa
+//    final static String HOST = "http://192.168.43.143/ssocial/";//la de mi telefono
+
+//    final static String URL_BASE = HOST + "index.php?modulo=";
+    final static String URL_BASE = HOST + "index.php?modulo="; // en host en internet el sitio esta en el directorio raiz
 
     // modulos
     final static String LOGUEO = "logeo";
@@ -39,7 +41,6 @@ public class ServicioSocial {
     final static String REGISTRO = "registro";
 
     // links de subida
-    //http://localhost/ssocial/index.php?modulo=admin&avance=v_solicitudServicio
     public final static String LINK_SUBIR_SOLICITUD_REGISTRO = URL_BASE+ "admin&avance=v_solicitudServicio&subir=subir_archivo";
 
     public final static String LINK_SUBIR_OFICIO_T = URL_BASE+ "admin&avance=v_oficioTerminacion&subir=subir_archivo";
@@ -107,7 +108,7 @@ public class ServicioSocial {
                     .data("sesion", "Iniciar Sesion")
                     .followRedirects(false)
                     .cookie(COOKIE_PHP, cookie)
-                    .timeout(2000)
+//                    .timeout(2000)
                     .post();
         }catch (Exception ex){
             String msg ="Error al acceder al servidor" + "\n" + ex.getMessage();
@@ -163,7 +164,8 @@ public class ServicioSocial {
     }
     
     public Bitmap descargarImagen() {
-        String URL = HOST + "ssocial/usuarios/" + noControl  + "/avatar.jpg";
+//        String URL = HOST + "ssocial/usuarios/" + noControl  + "/avatar.jpg";
+        String URL = HOST + "usuarios/" + noControl  + "/avatar.jpg";
         try {
             Connection.Response respuesta = Jsoup.connect(URL)
 
@@ -430,22 +432,22 @@ public class ServicioSocial {
      * @return
      */
     public String linkFormatoEvaluacionR() {
-        return HOST+ "ssocial/" + "documentos.php?cual=" + ARCHIVO_EV_RE;
+        return HOST+ "documentos.php?cual=" + ARCHIVO_EV_RE;
     }
     public final String ARCHIVO_SOLICITUD_RE = "Solicitud_De_Registro.docx";
     public String linkFormatoSolicitudRe () {
-        return HOST+ "ssocial/"  + "documentos.php?cual=" + SOLICITUD_RE;
+        return HOST+ "documentos.php?cual=" + SOLICITUD_RE;
     }
 
     public final static String ARCHIVO_INFORME_BI = "Informe_Bimestral.docx";
     public String linkFormatoInformeBimestral () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Bimestral.docx
-        return HOST+ "ssocial/"  + "documentos.php?cual=" + ARCHIVO_INFORME_BI;
+        return HOST+  "documentos.php?cual=" + ARCHIVO_INFORME_BI;
     }
     public final static String ARCHIVO_INFORME_G = "Informe_Global.docx";
     public String linkFormatoInformeGlobal () {
         //http://localhost/ssocial/documentos.php?cual=Informe_Global.docx
-        return HOST+ "ssocial/"  + "documentos.php?cual=" + ARCHIVO_INFORME_G;
+        return HOST+ "documentos.php?cual=" + ARCHIVO_INFORME_G;
     }
 
     public static final String ARCHIVO_CARTA_A = "encuestaservicio.pdf";
