@@ -62,7 +62,8 @@ public class OficioTerminacionActivity extends AppCompatActivity implements Inte
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Oficio de Terminación", data.getData(), ServicioSocial.LINK_SUBIR_OFICIO_T)
+            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Oficio de Terminación", data.getData(), ServicioSocial.LINK_SUBIR_OFICIO_T,
+                    this)
                     .execute();
         }
     }

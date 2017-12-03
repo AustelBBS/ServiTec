@@ -87,7 +87,7 @@ public class SolicitudRegistroActivity extends AppCompatActivity implements Inte
             new CentralDeConexiones.SubirArchivoAsync(this,
                     "Subiendo Solicitud de Registro",
                     data.getData(),
-                    ServicioSocial.LINK_SUBIR_SOLICITUD_REGISTRO)
+                    ServicioSocial.LINK_SUBIR_SOLICITUD_REGISTRO, this)
                     .execute();
         }
     }

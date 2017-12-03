@@ -85,12 +85,14 @@ public class CentralDeConexiones {
         String direccion;
         String paginaRespuesta;
         String fileName;
+        InterfaceDeActualizacion completionHandler;
 
-        public SubirArchivoAsync(Context c, String titulo, Uri uri, String direccion) {
+        public SubirArchivoAsync(Context c, String titulo, Uri uri, String direccion, InterfaceDeActualizacion alTerminar) {
             this.context = c;
             this.titulo = titulo;
             this.uri = uri;
             this.direccion = direccion;
+            this.completionHandler = alTerminar;
         }
 
         public static void seleccionarArchivo(Activity activity) {
@@ -223,6 +225,7 @@ public class CentralDeConexiones {
             dialog.dismiss();
             if(serverResponseCode == 200 && paginaRespuesta.contains("Copiado correctamente")){
                 Toast.makeText(context, "Copiado correctamente", Toast.LENGTH_SHORT).show();
+                new actualizarEstados(context, completionHandler).execute();
             }else{
                 Toast.makeText(context, "Error, no se pudo subir el archivo", Toast.LENGTH_SHORT).show();
             }
@@ -365,12 +368,14 @@ public class CentralDeConexiones {
         }
     }
 
-    class tareaNetwork extends AsyncTask<Void, Void, Void> {
+    private static class actualizarEstados extends AsyncTask<Void, Void, Void> {
         HashMap<String, String> actividadeNuevas;
+        InterfaceDeActualizacion CompletionHandler;
         Context context;
 
-        public tareaNetwork (Context context) {
+        public actualizarEstados (Context context, InterfaceDeActualizacion alTerminar) {
             this.context = context;
+            this.CompletionHandler = alTerminar;
         }
 
         @Override
@@ -382,7 +387,6 @@ public class CentralDeConexiones {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.d("CentralDeConexiones", "Buscando cambios");
             SharedPreferences actividadesViejas = context.getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
             Set<String> llaves = actividadeNuevas.keySet();
             for(String llave: llaves){
@@ -391,15 +395,9 @@ public class CentralDeConexiones {
 
                 if(!valorViejo.equals(valorNuevo)) {
                     guardar(llave, valorNuevo);
-//                    for(InterfaceDeActualizacion inter: actividadesPorActualizar) {
-//                        inter.actualizar();
-//                    }
-
-                }else {
-//                    Log.d(TAG, "No se cambio nada");
                 }
-
             }
+            CompletionHandler.actualizar();
         }
 
         void guardar(String actividad, String valor) {

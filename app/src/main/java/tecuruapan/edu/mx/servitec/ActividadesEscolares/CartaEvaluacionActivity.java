@@ -70,7 +70,7 @@ public class CartaEvaluacionActivity extends AppCompatActivity implements Interf
         if(resultCode == Activity.RESULT_OK && requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE){
             Uri uri = data.getData();
             new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Carta de evaluación receptora", uri,
-                    ServicioSocial.LINK_SUBIR_CARTA_EVALUACION_RECEP)
+                    ServicioSocial.LINK_SUBIR_CARTA_EVALUACION_RECEP, this)
                     .execute();
         }
     }

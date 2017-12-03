@@ -91,7 +91,7 @@ public class SegundoInformeActivity extends AppCompatActivity implements Interfa
             new CentralDeConexiones.SubirArchivoAsync(this,
                     "Subiendo Segundo Informe",
                     data.getData(),
-                    ServicioSocial.LINK_SUBIR_AVANCE_2)
+                    ServicioSocial.LINK_SUBIR_AVANCE_2, this)
                     .execute();
         }
     }

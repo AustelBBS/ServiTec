@@ -60,7 +60,7 @@ public class TercerInformeActivity extends AppCompatActivity implements Interfac
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE && resultCode == Activity.RESULT_OK){
             new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Tercer Informe",
-                    data.getData(), ServicioSocial.LINK_SUBIR_AVANCE_3)
+                    data.getData(), ServicioSocial.LINK_SUBIR_AVANCE_3, this)
                     .execute();
         }
     }

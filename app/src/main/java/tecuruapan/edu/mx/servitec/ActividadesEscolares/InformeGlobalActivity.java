@@ -59,7 +59,7 @@ public class InformeGlobalActivity extends AppCompatActivity implements Interfac
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK && requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE){
-            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Informe Global", data.getData(), ServicioSocial.LINK_SUBIR_INFORME_G)
+            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Informe Global", data.getData(), ServicioSocial.LINK_SUBIR_INFORME_G, this)
                     .execute();
         }
     }

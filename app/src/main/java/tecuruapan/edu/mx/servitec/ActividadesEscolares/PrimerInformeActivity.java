@@ -87,7 +87,8 @@ public class PrimerInformeActivity extends AppCompatActivity implements Interfac
             new CentralDeConexiones.SubirArchivoAsync(this,
                     "Subiendo Primer Informe",
                     data.getData(),
-                    ServicioSocial.LINK_SUBIR_AVANCE_1)
+                    ServicioSocial.LINK_SUBIR_AVANCE_1,
+                    this)
                     .execute();
         }
     }
