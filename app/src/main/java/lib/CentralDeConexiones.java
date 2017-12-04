@@ -57,12 +57,12 @@ public class CentralDeConexiones {
         long descargaId;
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(formatoUri);
-
+        request.addRequestHeader("Cookie", ServicioSocial.COOKIE_PHP + "=" + miServicioSocial.getCookie());
         request.setTitle(titulo);
         request.setDescription(descripcion);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, nombre);
 
-        // intent receiver para que sque uatostada cuando termine  la descarga
+        // intent receiver para que saque una tostada al terminar la descarga
         IntentFilter filter =  new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
             @Override
@@ -150,6 +150,7 @@ public class CentralDeConexiones {
                 conn.setDoOutput(true); // Allow Outputs
                 conn.setUseCaches(false); // Don't use a Cached Copy
                 conn.setInstanceFollowRedirects(false);
+//                conn.setInstanceFollowRedirects(true);// oficio de terminacion ocupa esto
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8\n");
                 conn.setRequestProperty("Accept-Encoding" ,"gzip, deflate, br");
@@ -199,7 +200,7 @@ public class CentralDeConexiones {
                 StringBuilder respuesta = new StringBuilder();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                 for (String line; (line = reader.readLine()) != null;) {
-//                        Log.d("MAR",line);
+                        Log.d("MAR",line);
                     respuesta.append(line);
                 }
                 paginaRespuesta = respuesta.toString();

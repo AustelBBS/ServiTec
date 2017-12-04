@@ -48,7 +48,7 @@ public class SegundoInformeActivity extends AppCompatActivity implements Interfa
 
     public void actualizarEstado() {
         SharedPreferences preferences = getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
-        String estado = preferences.getString(ServicioSocial.PRIMER_A, "error");
+        String estado = preferences.getString(ServicioSocial.SEGUNDO_A, "error");
         estadoTextView.setText(estado);
         estadoImageView.setImageResource(ActividadesActivity.imagenId(estado));
     }
@@ -60,8 +60,8 @@ public class SegundoInformeActivity extends AppCompatActivity implements Interfa
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(formatoUri);
 
-        request.setTitle("Formato de Informe bimestral");
-        request.setDescription("Descargando el formato para los informes bimestrales.");
+        request.setTitle("Informe_Bimestral.docx");
+        request.setDescription("ServiTec");
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Informe_Bimestral.docx");
 
         // intent receiver para que sque uatostada cuando termine  la descarga

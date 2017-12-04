@@ -57,8 +57,8 @@ public class SolicitudRegistroActivity extends AppCompatActivity implements Inte
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(formatoUri);
 
-        request.setTitle("Formato de Solicitud de Registro");
-        request.setDescription("Descargando el formato para la solicitud de registro.");
+        request.setTitle("Solicitud_De_Registro.docx");
+        request.setDescription("ServiTec");
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Solicitud_De_Registro.docx");
 
         // intent receiver para que sque uatostada cuando termine  la descarga

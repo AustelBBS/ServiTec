@@ -46,8 +46,8 @@ public class TercerInformeActivity extends AppCompatActivity implements Interfac
 
     public void descargarFormato(View sender) {
         downloadQueueId = CentralDeConexiones.descargar(this, CentralDeConexiones.miServicioSocial.linkFormatoInformeBimestral()
-                , "Formato de Informe bimestral",
-                "Descargando el formato para los informes bimestrales", "3" + ServicioSocial.ARCHIVO_INFORME_BI);
+                , ServicioSocial.ARCHIVO_INFORME_BI,
+                "ServiTec", ServicioSocial.ARCHIVO_INFORME_BI);
     }
 
     public void subirDocumento(View sender) {

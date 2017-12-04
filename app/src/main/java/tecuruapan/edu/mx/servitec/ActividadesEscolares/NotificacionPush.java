@@ -20,7 +20,7 @@ public class NotificacionPush {
         NotificationCompat.Builder mConstructor = new NotificationCompat.Builder(context);
         Intent intent = new Intent(context, ActividadesActivity.class);
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(context, (int) (Math.random() * 100), intent, 0);
         mConstructor.setSmallIcon(R.drawable.ic_notificacion);
         mConstructor.setContentTitle("Cambio en documentos");

@@ -46,8 +46,8 @@ public class InformeGlobalActivity extends AppCompatActivity implements Interfac
 
     public void descargarFormato(View sender) {
         downloadQueueId = CentralDeConexiones.descargar(this, CentralDeConexiones.miServicioSocial.linkFormatoInformeGlobal()
-                , "Formato de Informe Global",
-                "Descargando el formato de Informe Global.", ServicioSocial.ARCHIVO_INFORME_G);
+                , ServicioSocial.ARCHIVO_INFORME_G,
+                "ServiTec", ServicioSocial.ARCHIVO_INFORME_G);
     }
 
     public void subirDocumento(View sender) {
