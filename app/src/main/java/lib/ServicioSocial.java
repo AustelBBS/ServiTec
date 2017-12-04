@@ -27,8 +27,8 @@ public class ServicioSocial {
 
 
     //final static  String HOST = "https://oc048f0os.000webhostapp.com/";
-        final static String HOST = "http://192.168.1.74/ssocial/";//la de mi casa
-//    final static String HOST = "http://192.168.43.143/ssocial/";//la de mi telefono
+//    final static String HOST = "http://192.168.1.74/ssocial/";//la de mi casa
+    final static String HOST = "http://192.168.43.143/ssocial/";//la de mi telefono
 
 //    final static String URL_BASE = HOST + "index.php?modulo=";
     final static String URL_BASE = HOST + "index.php?modulo="; // en host en internet el sitio esta en el directorio raiz

@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceDeActual
         protected void onPostExecute(Void Void) {
             if(error.isEmpty()){
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 startActivity(intent);
                 Toast.makeText(MainActivity.this, "Se ha cerrado tu sesión", Toast.LENGTH_SHORT).show();
