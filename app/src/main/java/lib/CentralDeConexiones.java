@@ -57,12 +57,12 @@ public class CentralDeConexiones {
         long descargaId;
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(formatoUri);
-
+        request.addRequestHeader("Cookie", ServicioSocial.COOKIE_PHP + "=" + miServicioSocial.getCookie());
         request.setTitle(titulo);
         request.setDescription(descripcion);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, nombre);
 
-        // intent receiver para que sque uatostada cuando termine  la descarga
+        // intent receiver para que saque una tostada al terminar la descarga
         IntentFilter filter =  new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
             @Override
@@ -85,12 +85,14 @@ public class CentralDeConexiones {
         String direccion;
         String paginaRespuesta;
         String fileName;
+        InterfaceDeActualizacion completionHandler;
 
-        public SubirArchivoAsync(Context c, String titulo, Uri uri, String direccion) {
+        public SubirArchivoAsync(Context c, String titulo, Uri uri, String direccion, InterfaceDeActualizacion alTerminar) {
             this.context = c;
             this.titulo = titulo;
             this.uri = uri;
             this.direccion = direccion;
+            this.completionHandler = alTerminar;
         }
 
         public static void seleccionarArchivo(Activity activity) {
@@ -148,6 +150,7 @@ public class CentralDeConexiones {
                 conn.setDoOutput(true); // Allow Outputs
                 conn.setUseCaches(false); // Don't use a Cached Copy
                 conn.setInstanceFollowRedirects(false);
+//                conn.setInstanceFollowRedirects(true);// oficio de terminacion ocupa esto
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8\n");
                 conn.setRequestProperty("Accept-Encoding" ,"gzip, deflate, br");
@@ -197,7 +200,7 @@ public class CentralDeConexiones {
                 StringBuilder respuesta = new StringBuilder();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                 for (String line; (line = reader.readLine()) != null;) {
-//                        Log.d("MAR",line);
+                        Log.d("MAR",line);
                     respuesta.append(line);
                 }
                 paginaRespuesta = respuesta.toString();
@@ -223,6 +226,7 @@ public class CentralDeConexiones {
             dialog.dismiss();
             if(serverResponseCode == 200 && paginaRespuesta.contains("Copiado correctamente")){
                 Toast.makeText(context, "Copiado correctamente", Toast.LENGTH_SHORT).show();
+                new actualizarEstados(context, completionHandler).execute();
             }else{
                 Toast.makeText(context, "Error, no se pudo subir el archivo", Toast.LENGTH_SHORT).show();
             }
@@ -365,12 +369,14 @@ public class CentralDeConexiones {
         }
     }
 
-    class tareaNetwork extends AsyncTask<Void, Void, Void> {
+    private static class actualizarEstados extends AsyncTask<Void, Void, Void> {
         HashMap<String, String> actividadeNuevas;
+        InterfaceDeActualizacion CompletionHandler;
         Context context;
 
-        public tareaNetwork (Context context) {
+        public actualizarEstados (Context context, InterfaceDeActualizacion alTerminar) {
             this.context = context;
+            this.CompletionHandler = alTerminar;
         }
 
         @Override
@@ -382,7 +388,6 @@ public class CentralDeConexiones {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.d("CentralDeConexiones", "Buscando cambios");
             SharedPreferences actividadesViejas = context.getSharedPreferences(CentralDeConexiones.ACTIVIDADES_GUARDADAS, 0);
             Set<String> llaves = actividadeNuevas.keySet();
             for(String llave: llaves){
@@ -391,15 +396,9 @@ public class CentralDeConexiones {
 
                 if(!valorViejo.equals(valorNuevo)) {
                     guardar(llave, valorNuevo);
-//                    for(InterfaceDeActualizacion inter: actividadesPorActualizar) {
-//                        inter.actualizar();
-//                    }
-
-                }else {
-//                    Log.d(TAG, "No se cambio nada");
                 }
-
             }
+            CompletionHandler.actualizar();
         }
 
         void guardar(String actividad, String valor) {

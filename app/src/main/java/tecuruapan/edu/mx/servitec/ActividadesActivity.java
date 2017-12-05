@@ -223,6 +223,12 @@ public class ActividadesActivity extends AppCompatActivity implements  View.OnCl
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        actualizarEstados();
+    }
+
+    @Override
     public void actualizar() {
         actualizarEstados();
     }

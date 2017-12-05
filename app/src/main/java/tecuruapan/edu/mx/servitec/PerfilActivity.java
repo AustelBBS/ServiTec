@@ -1,13 +1,17 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -63,15 +67,17 @@ public class PerfilActivity extends AppCompatActivity implements InterfaceDeActu
         botonCambiarContrasenia = (Button) findViewById(R.id.button_contrasenia);
         botonEditar = (Button) findViewById(R.id.button_editar);
         botonCambiarImagen = (Button) findViewById(R.id.boton_perfil);
-        fecha = (TextView) findViewById(R.id.tvFecha);
+        // no hay ningun widget en el xml de perfil que tenga tvFecha
+//        fecha = (TextView) findViewById(R.id.tvFecha);
 
         new bajarDatos().execute();
         new bajarImagenAsyncTask().execute();
         long date = System.currentTimeMillis();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
-        String fechaCadena = sdf.format(date);
-        fecha.setText(fechaCadena);
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
+//        String fechaCadena = sdf.format(date);
+//        fecha.setText(fechaCadena);
     }
 
     public void editarDatos(View sender){
@@ -139,7 +145,7 @@ public class PerfilActivity extends AppCompatActivity implements InterfaceDeActu
                 .setView(vista)
                 .setCancelable(false)
                 .create();
-        dialogo.setOnShowListener(new DialogInterface.OnShowListener() {
+                dialogo.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 final Button botonOk = dialogo.getButton(AlertDialog.BUTTON_POSITIVE);

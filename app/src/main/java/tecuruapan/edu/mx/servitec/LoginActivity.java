@@ -1,10 +1,15 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,15 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import lib.CentralDeConexiones;
 import lib.ServicioSocial;
@@ -66,6 +62,8 @@ public class LoginActivity extends AppCompatActivity {
                 mostrarDialogo();
             }
         });
+        if(tenemosPermiso() == false)
+            pedirPermiso();
 
     }
 
@@ -143,10 +141,35 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, res, Toast.LENGTH_SHORT).show();
             if(CentralDeConexiones.miServicioSocial.sesionIniciada) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
 
             }
         }
     }
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private boolean tenemosPermiso(){
+        return this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void pedirPermiso (){
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET}, 1);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 1){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.d(TAG, "Permiso concedido" );
+            }else {
+                Log.d(TAG, "Permiso denegado" );
+                Toast.makeText(this, "Es necesario el permiso de escritura para descargar archivos", Toast.LENGTH_SHORT).show();
+                this.finish();
+            }
+        }
+    }
+
 }

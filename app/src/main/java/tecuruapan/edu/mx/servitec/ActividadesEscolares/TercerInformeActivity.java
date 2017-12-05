@@ -46,8 +46,8 @@ public class TercerInformeActivity extends AppCompatActivity implements Interfac
 
     public void descargarFormato(View sender) {
         downloadQueueId = CentralDeConexiones.descargar(this, CentralDeConexiones.miServicioSocial.linkFormatoInformeBimestral()
-                , "Formato de Informe bimestral",
-                "Descargando el formato para los informes bimestrales", "3" + ServicioSocial.ARCHIVO_INFORME_BI);
+                , ServicioSocial.ARCHIVO_INFORME_BI,
+                "ServiTec", ServicioSocial.ARCHIVO_INFORME_BI);
     }
 
     public void subirDocumento(View sender) {
@@ -60,7 +60,7 @@ public class TercerInformeActivity extends AppCompatActivity implements Interfac
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE && resultCode == Activity.RESULT_OK){
             new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Tercer Informe",
-                    data.getData(), ServicioSocial.LINK_SUBIR_AVANCE_3)
+                    data.getData(), ServicioSocial.LINK_SUBIR_AVANCE_3, this)
                     .execute();
         }
     }

@@ -30,6 +30,25 @@
         android:progress="45" />
 
     <Button
+        android:id="@+id/resumen"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
+        android:text="Resumen"
+        android:visibility="gone" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="-40dp"
+        android:src="@drawable/ic_resumen"
+        android:visibility="gone" />
+
+    <Button
         android:id="@+id/actividad"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -45,23 +64,6 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="-40dp"
         android:src="@drawable/ic_actividades" />
-
-    <Button
-        android:id="@+id/resumen"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/colorPrimary"
-        android:text="Resumen" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="-40dp"
-        android:src="@drawable/ic_resumen" />
 
     <Button
         android:id="@+id/perfil"

@@ -70,7 +70,7 @@ public class CartaEvaluacionActivity extends AppCompatActivity implements Interf
         if(resultCode == Activity.RESULT_OK && requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE){
             Uri uri = data.getData();
             new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Carta de evaluación receptora", uri,
-                    ServicioSocial.LINK_SUBIR_CARTA_EVALUACION_RECEP)
+                    ServicioSocial.LINK_SUBIR_CARTA_EVALUACION_RECEP, this)
                     .execute();
         }
     }
@@ -95,8 +95,8 @@ public class CartaEvaluacionActivity extends AppCompatActivity implements Interf
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(formatoUri);
 
-        request.setTitle("Formato de Evaluación Receptora");
-        request.setDescription("Descargando el formato para la carta de Evaluación Receptora.");
+        request.setTitle("Evaluacion_Receptora.docx");
+        request.setDescription("ServiTec");
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Evaluacion_Receptora.docx");
 
         // intent receiver para que sque uatostada cuando termine  la descarga

@@ -107,8 +107,8 @@ public class CartaPresentacionActivity extends AppCompatActivity implements Inte
     public void descargarCarta(View sender) {
         downloadID = CentralDeConexiones.descargar(this,
                 CentralDeConexiones.miServicioSocial.linkEjemploCartaAceptacion(),
-                "Ejemplo carta de aceptación",
-                "Recuerda que sólo es un ejemplo.", ServicioSocial.ARCHIVO_CARTA_A);
+                ServicioSocial.ARCHIVO_CARTA_A,
+                "ServiTec", ServicioSocial.ARCHIVO_CARTA_A);
     }
 
     public void botonDatos(View sender) {

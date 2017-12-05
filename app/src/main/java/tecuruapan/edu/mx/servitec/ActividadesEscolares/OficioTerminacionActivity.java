@@ -47,10 +47,11 @@ public class OficioTerminacionActivity extends AppCompatActivity implements Inte
 
 
     public void descargarFormato(View sender) {
-        Toast.makeText(this, "Ups! aun no se habilita esta descarga!", Toast.LENGTH_SHORT).show();
-//        downloadQueueId = CentralDeConexiones.descargar(this, ""
-//                , "Ejemplo de Carta de Terminación",
-//                "Descargando el formato de la carta de terminación");
+        downloadQueueId = CentralDeConexiones.descargar(this, ServicioSocial.LINK_DESCARGA_CARTA_TERMINACION,
+                "Carta_terminacion.pdf",
+                "ServiTec",
+                "Carta_terminacion.pdf"
+                );
     }
 
     public void subirDocumento(View sender) {
@@ -62,7 +63,8 @@ public class OficioTerminacionActivity extends AppCompatActivity implements Inte
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == CentralDeConexiones.SubirArchivoAsync.REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Oficio de Terminación", data.getData(), ServicioSocial.LINK_SUBIR_OFICIO_T)
+            new CentralDeConexiones.SubirArchivoAsync(this, "Subiendo Oficio de Terminación", data.getData(), ServicioSocial.LINK_SUBIR_OFICIO_T,
+                    this)
                     .execute();
         }
     }

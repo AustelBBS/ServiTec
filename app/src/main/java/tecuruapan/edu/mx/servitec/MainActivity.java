@@ -1,5 +1,6 @@
 package tecuruapan.edu.mx.servitec;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -60,8 +61,10 @@ public class MainActivity extends AppCompatActivity implements InterfaceDeActual
         });
         new ProgresoAsync ().execute();
         intentService = new Intent(this, DaemonDeActividades.class);
-        startService(intentService);
+        ComponentName d =startService(intentService);
+
         DaemonDeActividades.registrarInterfaz(this);
+
         long date = System.currentTimeMillis();
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceDeActual
     protected void onDestroy() {
         super.onDestroy();
         DaemonDeActividades.removerInterfaz(this);
+
     }
 
     private void cambiar(String activity) {
@@ -138,10 +142,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceDeActual
         protected void onPostExecute(Void Void) {
             if(error.isEmpty()){
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 startActivity(intent);
                 Toast.makeText(MainActivity.this, "Se ha cerrado tu sesión", Toast.LENGTH_SHORT).show();
+                stopService(intentService);
             }else {
                 Toast.makeText(MainActivity.this, "Wow hubo un problema al cerrar tu sesión", Toast.LENGTH_SHORT).show();
 

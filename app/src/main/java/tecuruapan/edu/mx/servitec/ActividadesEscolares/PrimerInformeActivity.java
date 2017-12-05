@@ -59,7 +59,7 @@ public class PrimerInformeActivity extends AppCompatActivity implements Interfac
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(formatoUri);
 
-        request.setTitle("Formato de Informe bimestral");
+        request.setTitle("Informe1_Bimestral.docx");
         request.setDescription("Descargando el formato para los informes bimestrales.");
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "Informe_Bimestral.docx");
 
@@ -87,7 +87,8 @@ public class PrimerInformeActivity extends AppCompatActivity implements Interfac
             new CentralDeConexiones.SubirArchivoAsync(this,
                     "Subiendo Primer Informe",
                     data.getData(),
-                    ServicioSocial.LINK_SUBIR_AVANCE_1)
+                    ServicioSocial.LINK_SUBIR_AVANCE_1,
+                    this)
                     .execute();
         }
     }

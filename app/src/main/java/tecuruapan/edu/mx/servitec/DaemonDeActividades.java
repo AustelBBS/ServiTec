@@ -47,8 +47,10 @@ import static lib.CentralDeConexiones.miServicioSocial;
         return null;
     }
 
+
     @Override
     public void onCreate() {
+
         notificacion = new NotificacionPush();
         super.onCreate();
         // cancelar si ya existe
@@ -59,6 +61,7 @@ import static lib.CentralDeConexiones.miServicioSocial;
         }
         //eshquedulear task
         timer.scheduleAtFixedRate(new Tarea(),0, INTERVALO);
+
     }
 
     private class Tarea extends TimerTask{
@@ -81,6 +84,15 @@ import static lib.CentralDeConexiones.miServicioSocial;
         HashMap<String, String> actividadeNuevas;
         @Override
         protected Void doInBackground(Void... voids) {
+            try {
+                if (miServicioSocial.sesionIniciada == false) {
+                    stopSelf();
+                    cancel(true);
+                }
+            }catch(Exception e){
+                stopSelf();
+                cancel(true);
+            }
             actividadeNuevas = miServicioSocial.recuperarActividades();
             return null;
         }
